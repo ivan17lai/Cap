@@ -521,6 +521,7 @@ export function ZoomTrack(props: {
 
 						return (
 							<SegmentRoot
+								overflowVisible={true}
 								class={cx(
 									"border duration-200 hover:border-gray-12 transition-colors group",
 									"bg-linear-to-r from-[#292929] via-[#434343] to-[#292929] shadow-[inset_0_8px_12px_3px_rgba(255,255,255,0.2)]",
@@ -600,7 +601,7 @@ export function ZoomTrack(props: {
 									)}
 								/>
 								<SegmentContent
-									class="flex justify-center items-center cursor-grab"
+									class="flex justify-center items-center cursor-grab rounded-xl"
 									onMouseDown={createMouseDownDrag(
 										() => {
 											const original = { ...segment() };
@@ -646,7 +647,7 @@ export function ZoomTrack(props: {
 											<>
 												{/* Ramp-up curve (Start) */}
 												<svg
-													class="absolute left-0 top-0 bottom-0 w-10 pointer-events-none opacity-20 text-white"
+													class="absolute left-0 top-0 bottom-0 w-10 pointer-events-none opacity-40 text-white"
 													preserveAspectRatio="none"
 													viewBox="0 0 100 100"
 												>
@@ -663,16 +664,17 @@ export function ZoomTrack(props: {
 													/>
 												</svg>
 
-												{/* Ramp-down curve (End, inside the block on the right) */}
+												{/* Ramp-down curve (End, outside the block on the right) */}
 												<svg
-													class="absolute right-0 top-0 bottom-0 w-10 pointer-events-none opacity-20 text-white"
+													class="absolute right-0 top-0 bottom-0 w-12 pointer-events-none opacity-40 text-white"
 													preserveAspectRatio="none"
 													viewBox="0 0 100 100"
+													style={{ transform: "translateX(100%)" }}
 												>
 													<path
 														d={
 															isInstant()
-																? "M 0 20 L 100 20 L 100 100"
+																? "M 0 20 L 0 100 L 100 100"
 																: "M 0 20 C 50 20, 50 100, 100 100"
 														}
 														stroke="currentColor"
