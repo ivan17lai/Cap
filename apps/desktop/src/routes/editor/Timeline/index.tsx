@@ -787,15 +787,18 @@ export function Timeline(props: {
 				}}
 				onMouseDown={(e) => {
 					createRoot((dispose) => {
-						let dragged = false;
+						const isScrubbingEnabled = generalSettings.data?.enableTimelineScrubbing;
+
+						if (isScrubbingEnabled) {
+							if (editorState.playing) {
+								void commands.stopPlayback();
+								setEditorState("playing", false);
+							}
+							void handleUpdatePlayhead(e);
+						}
 
 						const onMove = (moveEvent: MouseEvent) => {
-							if (generalSettings.data?.enableTimelineScrubbing) {
-								if (!dragged && editorState.playing) {
-									void commands.stopPlayback();
-									setEditorState("playing", false);
-								}
-								dragged = true;
+							if (isScrubbingEnabled) {
 								void handleUpdatePlayhead(moveEvent);
 							}
 						};
@@ -803,11 +806,11 @@ export function Timeline(props: {
 						createEventListener(window, "mousemove", onMove);
 
 						createEventListener(window, "mouseup", () => {
-							if (!dragged) {
+							if (!isScrubbingEnabled) {
 								void handleUpdatePlayhead(e);
-								if (zoomSegmentDragState.type === "idle") {
-									setEditorState("timeline", "selection", null);
-								}
+							}
+							if (zoomSegmentDragState.type === "idle") {
+								setEditorState("timeline", "selection", null);
 							}
 							dispose();
 						});
