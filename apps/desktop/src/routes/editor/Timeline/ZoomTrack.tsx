@@ -678,7 +678,7 @@ export function ZoomTrack(props: {
 										return (
 											<>
 												<svg
-													class="absolute inset-0 w-full h-full pointer-events-none opacity-80 text-blue-500 overflow-visible z-0"
+													class="absolute inset-0 w-full h-full pointer-events-none opacity-20 text-blue-500 overflow-visible z-0"
 													viewBox="0 0 100 100"
 													preserveAspectRatio="none"
 												>
