@@ -641,29 +641,62 @@ export function ZoomTrack(props: {
 									{(() => {
 										const ctx = useSegmentContext();
 
+										const isAuto = () => segment().mode === "auto";
+										const isInstant = () => segment().instantAnimation;
+
 										return (
-											<Switch>
-												<Match when={ctx.width() < 40}>
-													<div class="flex justify-center items-center">
-														<IconLucideSearch class="size-3.5 text-gray-1 dark:text-gray-12" />
-													</div>
-												</Match>
-												<Match when={ctx.width() < 100}>
-													<div class="flex gap-1 items-center text-xs whitespace-nowrap text-gray-1 dark:text-gray-12">
-														<IconLucideSearch class="size-3" />
-														<span>{zoomPercentage()}</span>
-													</div>
-												</Match>
-												<Match when={true}>
-													<div class="flex flex-col gap-1 justify-center items-center text-xs whitespace-nowrap text-gray-1 dark:text-gray-12 animate-in fade-in">
-														<span class="opacity-70">{t("Zoom")}</span>
-														<div class="flex gap-1 items-center text-md">
-															<IconLucideSearch class="size-3.5" />
-															{zoomPercentage()}
+											<>
+												{/* Background Easing Curve Visualization */}
+												<svg
+													class="absolute inset-0 w-full h-full pointer-events-none opacity-20 text-white"
+													preserveAspectRatio="none"
+													viewBox="0 0 100 100"
+												>
+													<path
+														d={
+															isInstant()
+																? "M 0 100 L 0 30 L 100 30"
+																: "M 0 100 C 20 100, 30 30, 50 30 L 100 30"
+														}
+														stroke="currentColor"
+														stroke-width="2"
+														fill="none"
+														vector-effect="non-scaling-stroke"
+													/>
+												</svg>
+
+												<Switch>
+													<Match when={ctx.width() < 40}>
+														<div class="flex relative z-10 justify-center items-center">
+															<IconLucideSearch class="size-3.5 text-gray-1 dark:text-gray-12" />
 														</div>
-													</div>
-												</Match>
-											</Switch>
+													</Match>
+													<Match when={ctx.width() < 100}>
+														<div class="flex relative z-10 gap-1 items-center text-xs whitespace-nowrap text-gray-1 dark:text-gray-12">
+															<IconLucideSearch class="size-3" />
+															<span>{zoomPercentage()}</span>
+														</div>
+													</Match>
+													<Match when={true}>
+														<div class="flex relative z-10 flex-col gap-1 justify-center items-center text-xs whitespace-nowrap text-gray-1 dark:text-gray-12 animate-in fade-in">
+															<span class="opacity-70 flex items-center gap-1">
+																{isAuto() ? (
+																	<>
+																		<IconLucideFocus class="size-3" />
+																		Auto Track
+																	</>
+																) : (
+																	t("Zoom")
+																)}
+															</span>
+															<div class="flex gap-1 items-center text-md font-medium">
+																<IconLucideSearch class="size-3.5" />
+																{zoomPercentage()}
+															</div>
+														</div>
+													</Match>
+												</Switch>
+											</>
 										);
 									})()}
 								</SegmentContent>
