@@ -646,10 +646,9 @@ export function ZoomTrack(props: {
 											<>
 												{/* Ramp-up curve (Start) */}
 												<svg
-													class="absolute left-0 top-0 bottom-0 w-16 pointer-events-none opacity-40 text-white"
+													class="absolute left-0 top-0 bottom-0 w-10 pointer-events-none opacity-20 text-white"
 													preserveAspectRatio="none"
 													viewBox="0 0 100 100"
-													style={{ transform: "translateX(0)" }}
 												>
 													<path
 														d={
@@ -664,17 +663,16 @@ export function ZoomTrack(props: {
 													/>
 												</svg>
 
-												{/* Ramp-down curve (End, extending outside) */}
+												{/* Ramp-down curve (End, inside the block on the right) */}
 												<svg
-													class="absolute right-0 top-0 bottom-0 w-16 pointer-events-none opacity-40 text-white"
+													class="absolute right-0 top-0 bottom-0 w-10 pointer-events-none opacity-20 text-white"
 													preserveAspectRatio="none"
 													viewBox="0 0 100 100"
-													style={{ transform: "translateX(100%)" }}
 												>
 													<path
 														d={
 															isInstant()
-																? "M 0 20 L 0 100 L 100 100"
+																? "M 0 20 L 100 20 L 100 100"
 																: "M 0 20 C 50 20, 50 100, 100 100"
 														}
 														stroke="currentColor"
