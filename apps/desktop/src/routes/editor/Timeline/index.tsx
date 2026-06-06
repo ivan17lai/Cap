@@ -25,6 +25,7 @@ import "./styles.css";
 import Tooltip from "~/components/Tooltip";
 import { defaultCaptionSettings } from "~/store/captions";
 import { defaultKeyboardSettings } from "~/store/keyboard";
+import { generalSettingsStore } from "~/store";
 import { commands } from "~/utils/tauri";
 import {
 	applyCaptionResultToProject,
@@ -145,6 +146,8 @@ export function Timeline(props: {
 		meta,
 		previewResolutionBase,
 	} = useEditorContext();
+
+	const generalSettings = generalSettingsStore.createQuery();
 
 	const duration = () => editorInstance.recordingDuration;
 	const transform = () => editorState.timeline.transform;
@@ -784,13 +787,28 @@ export function Timeline(props: {
 				}}
 				onMouseDown={(e) => {
 					createRoot((dispose) => {
-						createEventListener(e.currentTarget, "mouseup", () => {
-							handleUpdatePlayhead(e);
-							if (zoomSegmentDragState.type === "idle") {
-								setEditorState("timeline", "selection", null);
+						let dragged = false;
+
+						const onMove = (moveEvent: MouseEvent) => {
+							if (generalSettings.data?.enableTimelineScrubbing) {
+								if (!dragged && editorState.playing) {
+									void commands.stopPlayback();
+									setEditorState("playing", false);
+								}
+								dragged = true;
+								void handleUpdatePlayhead(moveEvent);
 							}
-						});
+						};
+
+						createEventListener(window, "mousemove", onMove);
+
 						createEventListener(window, "mouseup", () => {
+							if (!dragged) {
+								void handleUpdatePlayhead(e);
+								if (zoomSegmentDragState.type === "idle") {
+									setEditorState("timeline", "selection", null);
+								}
+							}
 							dispose();
 						});
 					});

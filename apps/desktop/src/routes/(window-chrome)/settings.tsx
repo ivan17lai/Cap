@@ -26,6 +26,7 @@ import { createSignInMutation } from "~/utils/auth";
 import { clientEnv } from "~/utils/env";
 import { apiClient, protectedHeaders } from "~/utils/web-api";
 import IconLucideUserRound from "~icons/lucide/user-round";
+import IconLucideWand2 from "~icons/lucide/wand-2";
 
 const USER_PROFILE_CACHE_GC_MS = 2 * 60 * 60 * 1000;
 const USER_PROFILE_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
@@ -228,9 +229,14 @@ export default function Settings(props: RouteSectionProps) {
 			icon: IconCapSettings,
 		},
 		{
+			href: "improvements",
+			name: "Editing Improvements",
+			icon: IconLucideWand2,
+		},
+		{
 			href: "feedback",
 			name: "Feedback",
-			icon: IconLucideMessageSquarePlus,
+			icon: IconLucideMessageSquareHeart,
 		},
 		{
 			href: "changelog",
