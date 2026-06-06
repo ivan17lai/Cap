@@ -640,23 +640,42 @@ export function ZoomTrack(props: {
 								>
 									{(() => {
 										const ctx = useSegmentContext();
-
-										const isAuto = () => segment().mode === "auto";
 										const isInstant = () => segment().instantAnimation;
 
 										return (
 											<>
-												{/* Background Easing Curve Visualization */}
+												{/* Ramp-up curve (Start) */}
 												<svg
-													class="absolute inset-0 w-full h-full pointer-events-none opacity-20 text-white"
+													class="absolute left-0 top-0 bottom-0 w-16 pointer-events-none opacity-40 text-white"
 													preserveAspectRatio="none"
 													viewBox="0 0 100 100"
+													style={{ transform: "translateX(0)" }}
 												>
 													<path
 														d={
 															isInstant()
-																? "M 0 100 L 0 30 L 100 30"
-																: "M 0 100 C 20 100, 30 30, 50 30 L 100 30"
+																? "M 0 100 L 0 20 L 100 20"
+																: "M 0 100 C 50 100, 50 20, 100 20"
+														}
+														stroke="currentColor"
+														stroke-width="2"
+														fill="none"
+														vector-effect="non-scaling-stroke"
+													/>
+												</svg>
+
+												{/* Ramp-down curve (End, extending outside) */}
+												<svg
+													class="absolute right-0 top-0 bottom-0 w-16 pointer-events-none opacity-40 text-white"
+													preserveAspectRatio="none"
+													viewBox="0 0 100 100"
+													style={{ transform: "translateX(100%)" }}
+												>
+													<path
+														d={
+															isInstant()
+																? "M 0 20 L 0 100 L 100 100"
+																: "M 0 20 C 50 20, 50 100, 100 100"
 														}
 														stroke="currentColor"
 														stroke-width="2"
@@ -679,16 +698,7 @@ export function ZoomTrack(props: {
 													</Match>
 													<Match when={true}>
 														<div class="flex relative z-10 flex-col gap-1 justify-center items-center text-xs whitespace-nowrap text-gray-1 dark:text-gray-12 animate-in fade-in">
-															<span class="opacity-70 flex items-center gap-1">
-																{isAuto() ? (
-																	<>
-																		<IconLucideFocus class="size-3" />
-																		Auto Track
-																	</>
-																) : (
-																	t("Zoom")
-																)}
-															</span>
+															<span class="opacity-70">{t("Zoom")}</span>
 															<div class="flex gap-1 items-center text-md font-medium">
 																<IconLucideSearch class="size-3.5" />
 																{zoomPercentage()}
