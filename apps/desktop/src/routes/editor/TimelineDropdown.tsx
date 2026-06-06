@@ -18,15 +18,15 @@ export function TimelineDropdown() {
 		<KDropdownMenu gutter={8} placement="bottom">
 			<EditorButton<typeof KDropdownMenu.Trigger>
 				as={KDropdownMenu.Trigger}
-				leftIcon={<IconCapFilmCut />}
-				rightIcon={<IconCapChevronDown />}
+				leftIcon={<IconCapFilmCut class="size-4" />}
+				rightIcon={<IconCapChevronDown class="size-4" />}
 			>
 				{t("Timeline")}
 			</EditorButton>
 			<KDropdownMenu.Portal>
 				<PopperContent<typeof KDropdownMenu.Content>
 					as={KDropdownMenu.Content}
-					class={cx("w-48 max-h-56", topCenterAnimateClasses)}
+					class={cx("w-52 max-h-56", topCenterAnimateClasses)}
 				>
 					<MenuItemList<typeof KDropdownMenu.Group>
 						as={KDropdownMenu.Group}
@@ -34,12 +34,12 @@ export function TimelineDropdown() {
 						<DropdownItem
 							class="flex items-center justify-between"
 							onSelect={(e) => {
-								e.preventDefault();
+								e?.preventDefault();
 								setEditorState("timeline", "showZoomCurves", (v) => !v);
 							}}
 						>
 							<span>{t("Show Zoom Curves")}</span>
-							{editorState.timeline.showZoomCurves && <IconCapCircleCheck class="text-blue-500" />}
+							{editorState.timeline.showZoomCurves && <IconCapCircleCheck class="size-4 text-blue-500" />}
 						</DropdownItem>
 					</MenuItemList>
 				</PopperContent>
