@@ -677,19 +677,21 @@ export function ZoomTrack(props: {
 
 										return (
 											<>
-												<svg
-													class="absolute inset-0 w-full h-full pointer-events-none opacity-20 text-blue-500 overflow-visible z-0"
-													viewBox="0 0 100 100"
-													preserveAspectRatio="none"
-												>
-													<path
-														d={d()}
-														stroke="currentColor"
-														stroke-width="3"
-														fill="none"
-														vector-effect="non-scaling-stroke"
-													/>
-												</svg>
+												<Show when={editorState.timeline.showZoomCurves}>
+													<svg
+														class="absolute inset-0 w-full h-full pointer-events-none opacity-20 text-blue-500 overflow-visible z-0"
+														viewBox="0 0 100 100"
+														preserveAspectRatio="none"
+													>
+														<path
+															d={d()}
+															stroke="currentColor"
+															stroke-width="3"
+															fill="none"
+															vector-effect="non-scaling-stroke"
+														/>
+													</svg>
+												</Show>
 
 												<Switch>
 													<Match when={ctx.width() < 40}>
