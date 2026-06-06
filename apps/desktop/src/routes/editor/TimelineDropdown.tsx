@@ -18,7 +18,7 @@ export function TimelineDropdown() {
 		<KDropdownMenu gutter={8} placement="bottom">
 			<EditorButton<typeof KDropdownMenu.Trigger>
 				as={KDropdownMenu.Trigger}
-				leftIcon={<IconCapFilmCut class="size-4" />}
+				leftIcon={<IconCapFilmCut class="size-4 invert dark:invert-0" />}
 				rightIcon={<IconCapChevronDown class="size-4" />}
 			>
 				{t("Timeline")}
