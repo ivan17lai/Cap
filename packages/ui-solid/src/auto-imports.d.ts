@@ -115,6 +115,7 @@ declare global {
   const IconLucideVideo: typeof import('~icons/lucide/video.jsx')['default']
   const IconLucideVideoOff: typeof import('~icons/lucide/video-off.jsx')['default']
   const IconLucideVolume2: typeof import('~icons/lucide/volume2.jsx')['default']
+  const IconLucideWand2: typeof import('~icons/lucide/wand2.jsx')['default']
   const IconLucideX: typeof import('~icons/lucide/x.jsx')['default']
   const IconLucideZap: typeof import('~icons/lucide/zap.jsx')['default']
   const IconPhMonitorBold: typeof import('~icons/ph/monitor-bold.jsx')['default']
