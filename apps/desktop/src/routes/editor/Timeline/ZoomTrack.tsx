@@ -653,8 +653,8 @@ export function ZoomTrack(props: {
 										const currAmt = () => segment().amount;
 										const nextAmt = () => isContiguousWithNext() ? next().amount : 1.0;
 
-										// Map amount to Y coordinate (1.0 -> 80, 2.0 -> 50, 3.0 -> 20)
-										const getY = (amt: number) => Math.max(10, 80 - (amt - 1) * 30);
+										// Map amount to Y coordinate to increase amplitude (1.0 -> 90, 2.0 -> 40)
+										const getY = (amt: number) => Math.max(5, 90 - (amt - 1) * 50);
 
 										const startY = () => getY(prevAmt());
 										const currY = () => getY(currAmt());
@@ -678,7 +678,7 @@ export function ZoomTrack(props: {
 										return (
 											<>
 												<svg
-													class="absolute inset-0 w-full h-full pointer-events-none opacity-60 text-white overflow-visible z-0"
+													class="absolute inset-0 w-full h-full pointer-events-none opacity-80 text-gray-200 overflow-visible z-0"
 													viewBox="0 0 100 100"
 													preserveAspectRatio="none"
 												>
