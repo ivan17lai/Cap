@@ -1192,4 +1192,6 @@ export const zhTW: Record<string, string> = {
 		"連結你自己的 S3 儲存桶，完全掌控資料儲存。所有新的分享連結上傳都會自動上傳到你設定的 S3 儲存桶，確保你完整擁有並掌控自己的內容。非常適合需要資料主權與自訂儲存政策的組織。",
 	"Connect Google Drive for new shareable link uploads. Cap stores new videos in a private Cap folder in your Drive and continues serving them through Cap after normal access checks.":
 		"連結 Google Drive 以上傳新的分享連結。Cap 會將新影片儲存在你雲端硬碟中的私人 Cap 資料夾，並在通過一般存取檢查後繼續透過 Cap 提供這些影片。",
+	Timeline: "時間軸",
+	"Show Zoom Curves": "顯示縮放曲線",
 };

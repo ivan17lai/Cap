@@ -1093,4 +1093,6 @@ export const jaJP: Record<string, string> = {
 	"Use your own domain for shareable links instead of cap.link": "共有リンクにcap.linkの代わりに独自のドメインを使用します",
 	"Connect your own S3 bucket for complete control over your data storage. All new shareable link uploads will be automatically uploaded to your configured S3 bucket, ensuring you maintain complete ownership and control over your content. Perfect for organizations requiring data sovereignty and custom storage policies.": "独自のS3バケットを接続し、データストレージを完全に制御します。共有リンクの新しいアップロードはすべて設定したS3バケットに自動的に保存され、コンテンツの完全な所有権と制御を維持できます。データの主権やカスタムストレージポリシーを必要とする組織に最適です。",
 	"Connect Google Drive for new shareable link uploads. Cap stores new videos in a private Cap folder in your Drive and continues serving them through Cap after normal access checks.": "共有リンクの新規アップロード用にGoogle Driveに接続します。Capは新しい動画をドライブ内の非公開のCapフォルダに保存し、通常のアクセス確認後にCapを通じて提供を続けます。",
+	Timeline: "タイムライン",
+	"Show Zoom Curves": "ズームカーブを表示",
 };
