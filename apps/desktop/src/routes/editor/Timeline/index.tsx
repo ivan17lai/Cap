@@ -22,6 +22,7 @@ import toast from "solid-toast";
 
 import "./styles.css";
 
+import { useI18n } from "~/i18n";
 import Tooltip from "~/components/Tooltip";
 import { defaultCaptionSettings } from "~/store/captions";
 import { defaultKeyboardSettings } from "~/store/keyboard";
@@ -133,6 +134,7 @@ export function Timeline(props: {
 		visibleTrackCount: number;
 	}) => void;
 }) {
+	const { t } = useI18n();
 	const {
 		project,
 		setProject,
@@ -433,7 +435,7 @@ export function Timeline(props: {
 		const menu = await Menu.new({
 			items: [
 				await MenuItem.new({
-					text: `Delete ${type === "text" ? "text" : "mask"} track`,
+					text: type === "text" ? t("Delete text track") : t("Delete mask track"),
 					action: () => handleDeleteTrackLane(type, laneIndex),
 				}),
 			],
@@ -693,9 +695,7 @@ export function Timeline(props: {
 			);
 
 			if (result.segments.length < 1) {
-				toast.error(
-					"No captions were generated. The audio might be too quiet or unclear.",
-				);
+				toast.error(t("No captions were generated. The audio might be too quiet or unclear."));
 				return;
 			}
 
@@ -712,11 +712,11 @@ export function Timeline(props: {
 
 			setEditorState("timeline", "tracks", "caption", true);
 			setEditorState("captions", "isStale", false);
-			toast.success("Captions generated successfully!");
+			toast.success(t("Captions generated successfully!"));
 		} catch (error) {
 			console.error("Error generating captions:", error);
 			const errorMessage = getCaptionGenerationErrorMessage(error);
-			toast.error(`Failed to generate captions: ${errorMessage}`);
+			toast.error(`${t("Failed to generate captions:")} ${errorMessage}`);
 		} finally {
 			setEditorState("captions", "isGenerating", false);
 		}
@@ -841,7 +841,7 @@ export function Timeline(props: {
 						<TimelineMarkings />
 					</div>
 					<div class="absolute bottom-0 z-30">
-						<Tooltip content="Add track">
+						<Tooltip content={t("Add track")}>
 							<TrackManager
 								options={trackOptions()}
 								onToggle={handleToggleTrack}
@@ -1012,6 +1012,7 @@ function TrackRow(props: {
 	onDelete?: () => void;
 	onContextMenu?: (e: MouseEvent) => void;
 }) {
+	const { t } = useI18n();
 	return (
 		<div
 			class="group/track flex items-stretch gap-2"
@@ -1034,7 +1035,7 @@ function TrackRow(props: {
 							props.onDelete?.();
 						}}
 						onMouseDown={(e) => e.stopPropagation()}
-						title="Delete track"
+						title={t("Delete track")}
 					>
 						<IconCapTrash class="size-4" />
 					</button>

@@ -35,6 +35,7 @@ import {
 } from "~/utils/tauri";
 import IconLucideImport from "~icons/lucide/import";
 import IconLucideSearch from "~icons/lucide/search";
+import { useI18n } from "~/i18n";
 import { Section, SettingsPageContent } from "./Setting";
 
 type Recording = {
@@ -101,6 +102,7 @@ const recordingsQuery = queryOptions<Recording[]>({
 });
 
 export default function Recordings() {
+	const { t } = useI18n();
 	const [activeTab, setActiveTab] = createSignal<(typeof Tabs)[number]["id"]>(
 		Tabs[0].id,
 	);
@@ -159,10 +161,10 @@ export default function Recordings() {
 	);
 
 	const emptyMessage = createMemo(() => {
-		const tabLabel =
-			activeTab() === "all" ? "recordings" : `${activeTab()} recordings`;
-		const prefix = trimmedSearch() ? "No matching" : "No";
-		return `${prefix} ${tabLabel}`;
+		if (trimmedSearch()) {
+			return `${t("No matching")} ${activeTab() === "all" ? t("recordings") : `${activeTab()} ${t("recordings")}`}`;
+		}
+		return `${t("No")} ${activeTab() === "all" ? t("recordings") : `${activeTab()} ${t("recordings")}`}`;
 	});
 
 	const handleRecordingClick = (recording: Recording) => {
@@ -202,8 +204,8 @@ export default function Recordings() {
 		<div class="cap-settings-page flex relative flex-col w-full h-full custom-scroll">
 			<SettingsPageContent class="max-w-none space-y-4">
 				<Section
-					title="Recordings"
-					description="Manage your recordings and perform actions."
+					title={t("Recordings")}
+					description={t("Manage your recordings and perform actions.")}
 					right={
 						<Button
 							variant="gray"
@@ -212,7 +214,7 @@ export default function Recordings() {
 							onClick={handleVideoImport}
 						>
 							<IconLucideImport class="size-3.5" />
-							<span>Import</span>
+							<span>{t("Import")}</span>
 						</Button>
 					}
 				>
@@ -220,7 +222,7 @@ export default function Recordings() {
 						when={recordings.data && recordings.data.length > 0}
 						fallback={
 							<p class="text-center text-(--text-tertiary) absolute flex items-center justify-center w-full h-full">
-								No recordings found
+								{t("No recordings found")}
 							</p>
 						}
 					>
@@ -256,7 +258,7 @@ export default function Recordings() {
 											setSearch("");
 										}
 									}}
-									placeholder="Search"
+									placeholder={t("Search")}
 									autoCapitalize="off"
 									autocorrect="off"
 									autocomplete="off"
@@ -308,7 +310,7 @@ export default function Recordings() {
 											)
 										}
 									>
-										Load more
+										{t("Load more")}
 									</Button>
 								</div>
 							</Show>
@@ -328,6 +330,7 @@ function RecordingItem(props: {
 	onCopyVideoToClipboard: () => void;
 	uploadProgress: number | undefined;
 }) {
+	const { t } = useI18n();
 	const [imageExists, setImageExists] = createSignal(true);
 	const mode = () => props.recording.meta.mode;
 	const firstLetterUpperCase = () =>

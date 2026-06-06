@@ -11,6 +11,7 @@ import type { OrganizationBrandColorSwatch } from "~/utils/organization-branding
 import { commands } from "~/utils/tauri";
 import IconCapChevronDown from "~icons/cap/chevron-down";
 import IconCapCircleCheck from "~icons/cap/circle-check";
+import { useI18n } from "~/i18n";
 import { useEditorContext } from "./context";
 import {
 	FONT_OPTIONS,
@@ -33,6 +34,7 @@ import {
 export function KeyboardTab(props: {
 	brandColorSwatches: OrganizationBrandColorSwatch[];
 }) {
+	const { t } = useI18n();
 	const { project, setProject, editorState, setEditorState } =
 		useEditorContext();
 
@@ -127,7 +129,7 @@ export function KeyboardTab(props: {
 
 	return (
 		<Field
-			name="Show keyboard"
+			name={t("Show keyboard")}
 			value={
 				<Toggle checked={getSetting("enabled")} onChange={setKeyboardVisible} />
 			}
@@ -140,10 +142,10 @@ export function KeyboardTab(props: {
 						!getSetting("enabled") && "opacity-50 pointer-events-none",
 					)}
 				>
-					<Field name="Font Settings" icon={<IconLucideKeyboard />}>
+					<Field name={t("Font Settings")} icon={<IconLucideKeyboard />}>
 						<div class="space-y-3">
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Font Family</span>
+								<span class="text-gray-11 text-sm">{t("Font Family")}</span>
 								<KSelect<string>
 									options={FONT_OPTIONS.map((f) => f.value)}
 									value={getSetting("font")}
@@ -193,7 +195,7 @@ export function KeyboardTab(props: {
 							</div>
 
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Size</span>
+								<span class="text-gray-11 text-sm">{t("Size")}</span>
 								<Slider
 									value={[getSetting("size")]}
 									onChange={(v) => updateSetting("size", v[0])}
@@ -204,7 +206,7 @@ export function KeyboardTab(props: {
 							</div>
 
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Text Color</span>
+								<span class="text-gray-11 text-sm">{t("Text Color")}</span>
 								<HexColorInput
 									value={getSetting("color")}
 									brandColorSwatches={props.brandColorSwatches}
@@ -214,10 +216,10 @@ export function KeyboardTab(props: {
 						</div>
 					</Field>
 
-					<Field name="Background Settings" icon={<IconLucideKeyboard />}>
+					<Field name={t("Background Settings")} icon={<IconLucideKeyboard />}>
 						<div class="space-y-3">
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Background Color</span>
+								<span class="text-gray-11 text-sm">{t("Background Color")}</span>
 								<HexColorInput
 									value={getSetting("backgroundColor")}
 									brandColorSwatches={props.brandColorSwatches}
@@ -226,7 +228,7 @@ export function KeyboardTab(props: {
 							</div>
 
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Background Opacity</span>
+								<span class="text-gray-11 text-sm">{t("Background Opacity")}</span>
 								<Slider
 									value={[getSetting("backgroundOpacity")]}
 									onChange={(v) => updateSetting("backgroundOpacity", v[0])}
@@ -238,7 +240,7 @@ export function KeyboardTab(props: {
 						</div>
 					</Field>
 
-					<Field name="Position" icon={<IconLucideKeyboard />}>
+					<Field name={t("Position")} icon={<IconLucideKeyboard />}>
 						<KSelect<string>
 							options={KEYBOARD_POSITION_OPTIONS.map((p) => p.value)}
 							value={getSetting("position")}
@@ -288,7 +290,7 @@ export function KeyboardTab(props: {
 						</KSelect>
 					</Field>
 
-					<Field name="Font Weight" icon={<IconLucideKeyboard />}>
+					<Field name={t("Font Weight")} icon={<IconLucideKeyboard />}>
 						<KSelect
 							options={TEXT_WEIGHT_OPTIONS}
 							optionValue="value"
@@ -343,10 +345,10 @@ export function KeyboardTab(props: {
 						</KSelect>
 					</Field>
 
-					<Field name="Animation" icon={<IconLucideKeyboard />}>
+					<Field name={t("Animation")} icon={<IconLucideKeyboard />}>
 						<div class="space-y-3">
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Fade Duration</span>
+								<span class="text-gray-11 text-sm">{t("Fade Duration")}</span>
 								<Slider
 									value={[getSetting("fadeDuration") * 100]}
 									onChange={(v) => updateSetting("fadeDuration", v[0] / 100)}
@@ -360,7 +362,7 @@ export function KeyboardTab(props: {
 							</div>
 
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Linger Duration</span>
+								<span class="text-gray-11 text-sm">{t("Linger Duration")}</span>
 								<Slider
 									value={[getSetting("lingerDuration") * 100]}
 									onChange={(v) => updateSetting("lingerDuration", v[0] / 100)}
@@ -374,7 +376,7 @@ export function KeyboardTab(props: {
 							</div>
 
 							<div class="flex flex-col gap-2">
-								<span class="text-gray-11 text-sm">Grouping Threshold</span>
+								<span class="text-gray-11 text-sm">{t("Grouping Threshold")}</span>
 								<Slider
 									value={[getSetting("groupingThresholdMs")]}
 									onChange={(v) => updateSetting("groupingThresholdMs", v[0])}
@@ -389,11 +391,11 @@ export function KeyboardTab(props: {
 						</div>
 					</Field>
 
-					<Field name="Behavior" icon={<IconLucideKeyboard />}>
+					<Field name={t("Behavior")} icon={<IconLucideKeyboard />}>
 						<div class="space-y-3">
 							<div class="flex flex-col gap-2">
 								<div class="flex items-center justify-between">
-									<span class="text-gray-11 text-sm">Show Modifier Keys</span>
+									<span class="text-gray-11 text-sm">{t("Show Modifier Keys")}</span>
 									<Toggle
 										checked={getSetting("showModifiers")}
 										onChange={(checked) =>
@@ -405,7 +407,7 @@ export function KeyboardTab(props: {
 
 							<div class="flex flex-col gap-2">
 								<div class="flex items-center justify-between">
-									<span class="text-gray-11 text-sm">Show Special Keys</span>
+									<span class="text-gray-11 text-sm">{t("Show Special Keys")}</span>
 									<Toggle
 										checked={getSetting("showSpecialKeys")}
 										onChange={(checked) =>
@@ -417,7 +419,7 @@ export function KeyboardTab(props: {
 
 							<div class="flex flex-col gap-2">
 								<div class="flex items-center justify-between">
-									<span class="text-gray-11 text-sm">Uppercase</span>
+									<span class="text-gray-11 text-sm">{t("Uppercase")}</span>
 									<Toggle
 										checked={getSetting("uppercase")}
 										onChange={(checked) => updateSetting("uppercase", checked)}
@@ -444,11 +446,11 @@ export function KeyboardTab(props: {
 					<Show when={selectedSegment()}>
 						{(seg) => (
 							<Field
-								name="Selected Segment Override"
+								name={t("Selected Segment Override")}
 								icon={<IconLucideKeyboard />}
 							>
 								<div class="space-y-3">
-									<Subfield name="Start Time">
+									<Subfield name={t("Start Time")}>
 										<Input
 											type="number"
 											value={seg().start.toFixed(2)}
@@ -465,7 +467,7 @@ export function KeyboardTab(props: {
 											}
 										/>
 									</Subfield>
-									<Subfield name="End Time">
+									<Subfield name={t("End Time")}>
 										<Input
 											type="number"
 											value={seg().end.toFixed(2)}
@@ -482,7 +484,7 @@ export function KeyboardTab(props: {
 											}
 										/>
 									</Subfield>
-									<Subfield name="Display Text">
+									<Subfield name={t("Display Text")}>
 										<Input
 											type="text"
 											value={seg().displayText}
@@ -497,7 +499,7 @@ export function KeyboardTab(props: {
 											}
 										/>
 									</Subfield>
-									<Subfield name="Fade Duration Override">
+									<Subfield name={t("Fade Duration Override")}>
 										<Slider
 											value={[
 												(seg().fadeDurationOverride ??
@@ -517,7 +519,7 @@ export function KeyboardTab(props: {
 											step={1}
 										/>
 									</Subfield>
-									<Subfield name="Uppercase">
+									<Subfield name={t("Uppercase")}>
 										<Toggle
 											checked={
 												seg().uppercaseOverride ?? getSetting("uppercase")
@@ -540,7 +542,7 @@ export function KeyboardTab(props: {
 
 					<Show when={!hasKeyboardSegments()}>
 						<div class="text-center text-sm text-gray-11 py-4">
-							<p>No keyboard segments yet.</p>
+							<p>{t("No keyboard segments yet.")}</p>
 							<p class="text-xs mt-1 text-gray-10">
 								Click "Generate Keyboard Segments" to create segments from
 								recorded keyboard presses.
