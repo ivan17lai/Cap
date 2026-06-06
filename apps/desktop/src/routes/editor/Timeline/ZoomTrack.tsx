@@ -661,32 +661,31 @@ export function ZoomTrack(props: {
 										const endY = () => getY(nextAmt());
 
 										const W = () => Math.max(1, ctx.width());
-										const rampUpW = () => Math.min(40, W() / 2);
-										const rampDownW = 40;
+										const rampUpPct = () => (Math.min(40, W() / 2) / W()) * 100;
+										const rampDownPct = () => (40 / W()) * 100;
 
 										const d = () => {
 											if (isInstant()) {
-												return `M 0 ${startY()} L 0 ${currY()} L ${W()} ${currY()} ${
-													!isContiguousWithNext() ? `L ${W()} ${endY()} L ${W() + rampDownW} ${endY()}` : ""
+												return `M 0 ${startY()} L 0 ${currY()} L 100 ${currY()} ${
+													!isContiguousWithNext() ? `L 100 ${endY()} L ${100 + rampDownPct()} ${endY()}` : ""
 												}`;
 											}
-											return `M 0 ${startY()} C ${rampUpW() / 2} ${startY()}, ${rampUpW() / 2} ${currY()}, ${rampUpW()} ${currY()} L ${W()} ${currY()} ${
-												!isContiguousWithNext() ? `C ${W() + rampDownW / 2} ${currY()}, ${W() + rampDownW / 2} ${endY()}, ${W() + rampDownW} ${endY()}` : ""
+											return `M 0 ${startY()} C ${rampUpPct() / 2} ${startY()}, ${rampUpPct() / 2} ${currY()}, ${rampUpPct()} ${currY()} L 100 ${currY()} ${
+												!isContiguousWithNext() ? `C ${100 + rampDownPct() / 2} ${currY()}, ${100 + rampDownPct() / 2} ${endY()}, ${100 + rampDownPct()} ${endY()}` : ""
 											}`;
 										};
 
 										return (
 											<>
 												<svg
-													class="absolute inset-y-0 left-0 pointer-events-none opacity-50 text-white overflow-visible"
-													style={{ width: `${W()}px` }}
-													viewBox={`0 0 ${W()} 100`}
+													class="absolute inset-0 w-full h-full pointer-events-none opacity-60 text-white overflow-visible z-0"
+													viewBox="0 0 100 100"
 													preserveAspectRatio="none"
 												>
 													<path
 														d={d()}
 														stroke="currentColor"
-														stroke-width="2.5"
+														stroke-width="3"
 														fill="none"
 														vector-effect="non-scaling-stroke"
 													/>
