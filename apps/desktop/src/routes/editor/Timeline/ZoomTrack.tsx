@@ -638,47 +638,55 @@ export function ZoomTrack(props: {
 											});
 										},
 									)}
-								>
+>
 									{(() => {
 										const ctx = useSegmentContext();
 										const isInstant = () => segment().instantAnimation;
 
+										const prev = () => zoomSegments()[i - 1];
+										const next = () => zoomSegments()[i + 1];
+
+										const isContiguousWithPrev = () => prev() && prev().end === segment().start;
+										const isContiguousWithNext = () => next() && next().start === segment().end;
+
+										const prevAmt = () => isContiguousWithPrev() ? prev().amount : 1.0;
+										const currAmt = () => segment().amount;
+										const nextAmt = () => isContiguousWithNext() ? next().amount : 1.0;
+
+										// Map amount to Y coordinate (1.0 -> 80, 2.0 -> 50, 3.0 -> 20)
+										const getY = (amt: number) => Math.max(10, 80 - (amt - 1) * 30);
+
+										const startY = () => getY(prevAmt());
+										const currY = () => getY(currAmt());
+										const endY = () => getY(nextAmt());
+
+										const W = () => Math.max(1, ctx.width());
+										const rampUpW = () => Math.min(40, W() / 2);
+										const rampDownW = 40;
+
+										const d = () => {
+											if (isInstant()) {
+												return `M 0 ${startY()} L 0 ${currY()} L ${W()} ${currY()} ${
+													!isContiguousWithNext() ? `L ${W()} ${endY()} L ${W() + rampDownW} ${endY()}` : ""
+												}`;
+											}
+											return `M 0 ${startY()} C ${rampUpW() / 2} ${startY()}, ${rampUpW() / 2} ${currY()}, ${rampUpW()} ${currY()} L ${W()} ${currY()} ${
+												!isContiguousWithNext() ? `C ${W() + rampDownW / 2} ${currY()}, ${W() + rampDownW / 2} ${endY()}, ${W() + rampDownW} ${endY()}` : ""
+											}`;
+										};
+
 										return (
 											<>
-												{/* Ramp-up curve (Start) */}
 												<svg
-													class="absolute left-0 top-0 bottom-0 w-10 pointer-events-none opacity-40 text-white"
+													class="absolute inset-y-0 left-0 pointer-events-none opacity-50 text-white overflow-visible"
+													style={{ width: `${W()}px` }}
+													viewBox={`0 0 ${W()} 100`}
 													preserveAspectRatio="none"
-													viewBox="0 0 100 100"
 												>
 													<path
-														d={
-															isInstant()
-																? "M 0 100 L 0 20 L 100 20"
-																: "M 0 100 C 50 100, 50 20, 100 20"
-														}
+														d={d()}
 														stroke="currentColor"
-														stroke-width="2"
-														fill="none"
-														vector-effect="non-scaling-stroke"
-													/>
-												</svg>
-
-												{/* Ramp-down curve (End, outside the block on the right) */}
-												<svg
-													class="absolute right-0 top-0 bottom-0 w-12 pointer-events-none opacity-40 text-white"
-													preserveAspectRatio="none"
-													viewBox="0 0 100 100"
-													style={{ transform: "translateX(100%)" }}
-												>
-													<path
-														d={
-															isInstant()
-																? "M 0 20 L 0 100 L 100 100"
-																: "M 0 20 C 50 20, 50 100, 100 100"
-														}
-														stroke="currentColor"
-														stroke-width="2"
+														stroke-width="2.5"
 														fill="none"
 														vector-effect="non-scaling-stroke"
 													/>
