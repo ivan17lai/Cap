@@ -26,11 +26,13 @@ const proFeatures = [
 
 import { RuntimeLoader } from "@rive-app/canvas";
 import riveWASMResource from "@rive-app/canvas/rive.wasm?url";
+import { useI18n } from "~/i18n";
 import { createSignInMutation } from "~/utils/auth";
 
 RuntimeLoader.setWasmUrl(riveWASMResource);
 
 export default function Page() {
+	const { t } = useI18n();
 	const [isProAnnual, setIsProAnnual] = createSignal(true);
 	const [isCommercialAnnual, setIsCommercialAnnual] = createSignal(true);
 	const [upgradeComplete, _setUpgradeComplete] = createSignal(false);
@@ -254,9 +256,9 @@ export default function Page() {
 			{upgradeComplete() && (
 				<div class="flex justify-center items-center h-full bg-opacity-75">
 					<div class="relative z-10 p-6 text-center bg-white rounded-lg shadow-lg">
-						<h2 class="mb-4 text-2xl font-bold">Upgrade complete</h2>
+						<h2 class="mb-4 text-2xl font-bold">{t("Upgrade complete")}</h2>
 						<p class="mb-4 text-sm text-gray-10">
-							You can now close this window - thank you for upgrading!
+							{t("You can now close this window - thank you for upgrading!")}
 						</p>
 						<Button
 							onClick={() => {
@@ -267,7 +269,7 @@ export default function Page() {
 							variant="primary"
 							size="lg"
 						>
-							Close window
+							{t("Close window")}
 						</Button>
 					</div>
 				</div>
@@ -277,16 +279,16 @@ export default function Page() {
 					<div class="p-8 mx-auto w-full max-w-[700px] rounded-xl border shadow-xs bg-gray-2 border-gray-3">
 						<div class="space-y-6">
 							<div class="flex flex-col items-center mb-6 text-center">
-								<h3 class="text-2xl font-medium">Commercial License</h3>
+								<h3 class="text-2xl font-medium">{t("Commercial License")}</h3>
 								<p class="text-sm text-gray-11">
-									Your license details for Cap commercial use
+									{t("Your license details for Cap commercial use")}
 								</p>
 							</div>
 
 							<div class="space-y-6">
 								<div>
 									<label class="block mb-2 text-sm text-gray-12">
-										License Key
+										{t("License Key")}
 									</label>
 									<p class="overflow-x-auto p-3 font-mono text-xs whitespace-pre-wrap break-all rounded-lg border border-gray-4 text-gray-9 bg-gray-3">
 										{license.data.licenseKey}
@@ -296,7 +298,7 @@ export default function Page() {
 								<Show when={license.data.expiryDate}>
 									{(expiryDate) => (
 										<div class="space-y-1">
-											<label class="text-sm text-gray-12">Expires</label>
+											<label class="text-sm text-gray-12">{t("Expires")}</label>
 											<p class="text-gray-10">
 												{new Date(expiryDate()).toLocaleDateString(undefined, {
 													year: "numeric",
@@ -317,8 +319,8 @@ export default function Page() {
 										}}
 									>
 										{resetLicense.isPending
-											? "Deactivating..."
-											: "Deactivate License"}
+											? t("Deactivating...")
+											: t("Deactivate License")}
 									</Button>
 								</div>
 							</div>
@@ -328,7 +330,7 @@ export default function Page() {
 					<>
 						<div class="text-center">
 							<h1 class="text-4xl md:text-4xl mb-6 tracking-[-.05em] font-medium text-(--text-primary)">
-								Early Adopter Pricing
+								{t("Early Adopter Pricing")}
 							</h1>
 						</div>
 						<div class="flex gap-4 w-full">
@@ -358,10 +360,10 @@ export default function Page() {
 										<Commercial class="w-[250px]" />
 										<div class="space-y-1 text-center">
 											<h3 class="text-2xl font-medium tracking-tight leading-5">
-												Commercial License
+												{t("Commercial License")}
 											</h3>
 											<p class="mt-2 text-sm text-(--text-tertiary)">
-												For commercial use
+												{t("For commercial use")}
 											</p>
 										</div>
 										<div class="flex flex-col justify-center items-center">
@@ -371,12 +373,12 @@ export default function Page() {
 											</h3>
 											{isCommercialAnnual() && (
 												<p class="text-[16px] font-medium text-gray-11">
-													billed annually
+													{t("billed annually")}
 												</p>
 											)}
 											{!isCommercialAnnual() && (
 												<p class="text-[16px] font-medium text-gray-11">
-													one-time payment
+													{t("one-time payment")}
 												</p>
 											)}
 										</div>
@@ -424,14 +426,14 @@ export default function Page() {
 										size="lg"
 									>
 										{openCommercialCheckout.isPending
-											? "Loading..."
-											: "Purchase License"}
+											? t("Loading...")
+											: t("Purchase License")}
 									</Button>
 									<p
 										onClick={() => setOpenLicenseDialog(true)}
 										class="mb-2 text-sm transition-colors cursor-pointer text-gray-11 hover:text-gray-12"
 									>
-										Already have a license key?
+										{t("Already have a license key?")}
 									</p>
 								</div>
 							</div>
@@ -466,7 +468,7 @@ export default function Page() {
 												Cap Pro
 											</h3>
 											<p class="text-[0.875rem] text-gray-9">
-												For professional use and teams.
+												{t("For professional use and teams.")}
 											</p>
 										</div>
 										<div class="flex flex-col justify-center items-center">
@@ -476,12 +478,12 @@ export default function Page() {
 											</h3>
 											{isProAnnual() && (
 												<p class="text-[16px] font-medium text-gray-9">
-													per user, billed annually
+													{t("per user, billed annually")}
 												</p>
 											)}
 											{!isProAnnual() && (
 												<p class="text-[16px] font-medium text-gray-9">
-													per user, billed monthly
+													{t("per user, billed monthly")}
 												</p>
 											)}
 										</div>
@@ -514,7 +516,7 @@ export default function Page() {
 										class="rounded-full! text-lg! w-full mx-auto"
 										onClick={openCheckoutInExternalBrowser}
 									>
-										{loading() ? "Loading..." : "Upgrade to Cap Pro"}
+										{loading() ? t("Loading...") : t("Upgrade to Cap Pro")}
 									</Button>
 								</div>
 							</div>
@@ -531,6 +533,7 @@ interface Props {
 }
 
 const ActivateLicenseDialog = ({ open, onOpenChange }: Props) => {
+	const { t } = useI18n();
 	const [licenseKey, setLicenseKey] = createSignal("");
 	const queryClient = useQueryClient();
 
@@ -569,7 +572,7 @@ const ActivateLicenseDialog = ({ open, onOpenChange }: Props) => {
 	return (
 		<Dialog.Root open={open()} onOpenChange={onOpenChange}>
 			<DialogContent
-				title="Activate License"
+				title={t("Activate License")}
 				confirm={
 					<Dialog.ConfirmButton
 						disabled={activateLicenseKey.isPending}
@@ -579,13 +582,13 @@ const ActivateLicenseDialog = ({ open, onOpenChange }: Props) => {
 							})
 						}
 					>
-						Activate
+						{t("Activate")}
 					</Dialog.ConfirmButton>
 				}
 			>
 				<Input
 					class="mt-2"
-					placeholder="Enter license key..."
+					placeholder={t("Enter license key...")}
 					value={licenseKey()}
 					onInput={(e) => setLicenseKey(e.currentTarget.value)}
 				/>

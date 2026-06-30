@@ -45,6 +45,7 @@ import gradientBg from "~/assets/illustrations/gradient.webp";
 import imageBg from "~/assets/illustrations/image.webp";
 import transparentBg from "~/assets/illustrations/transparent.webp";
 import { Toggle } from "~/components/Toggle";
+import { useI18n } from "~/i18n";
 import { generalSettingsStore } from "~/store";
 import { normalizeOpaqueHexColor } from "~/utils/hex-color";
 import {
@@ -401,6 +402,7 @@ const TAB_IDS = {
 } as const;
 
 export function ConfigSidebar() {
+	const { t } = useI18n();
 	const {
 		project,
 		setProject,
@@ -566,17 +568,17 @@ export function ConfigSidebar() {
 					class="flex flex-col flex-1 gap-6 p-4 min-h-0"
 				>
 					<Field
-						name="Audio Controls"
+						name={t("Audio Controls")}
 						icon={<IconLucideVolume2 class="size-4" />}
 					>
-						<Subfield name="Mute Audio">
+						<Subfield name={t("Mute Audio")}>
 							<Toggle
 								checked={project.audio.mute}
 								onChange={(v) => setProject("audio", "mute", v)}
 							/>
 						</Subfield>
 						{editorInstance.recordings.segments[0].mic?.channels === 2 && (
-							<Subfield name="Microphone Stereo Mode">
+							<Subfield name={t("Microphone Stereo Mode")}>
 								<KSelect<{ name: string; value: StereoMode }>
 									options={STEREO_MODES}
 									optionValue="value"
@@ -594,7 +596,7 @@ export function ConfigSidebar() {
 											item={props.item}
 										>
 											<KSelect.ItemLabel class="flex-1">
-												{props.item.rawValue.name}
+												{t(props.item.rawValue.name)}
 											</KSelect.ItemLabel>
 										</MenuItem>
 									)}
@@ -604,7 +606,7 @@ export function ConfigSidebar() {
 											name: string;
 											value: StereoMode;
 										}> class="flex-1 text-sm text-left truncate text-(--gray-500) font-normal">
-											{(state) => <span>{state.selectedOption().name}</span>}
+											{(state) => <span>{t(state.selectedOption().name)}</span>}
 										</KSelect.Value>
 										<KSelect.Icon<ValidComponent>
 											as={(props) => (
@@ -630,7 +632,7 @@ export function ConfigSidebar() {
 							</Subfield>
 						)}
 
-						{/* <Subfield name="Mute Audio">
+						{/* <Subfield name={t("Mute Audio")}>
                 <Toggle
                   checked={project.audio.mute}
                   onChange={(v) => setProject("audio", "mute", v)}
@@ -638,14 +640,14 @@ export function ConfigSidebar() {
               </Subfield> */}
 
 						{/* <ComingSoonTooltip>
-                <Subfield name="Improve Mic Quality">
+                <Subfield name={t("Improve Mic Quality")}>
                   <Toggle disabled />
                 </Subfield>
               </ComingSoonTooltip> */}
 					</Field>
 					{meta().hasMicrophone && (
 						<Field
-							name="Microphone Volume"
+							name={t("Microphone Volume")}
 							icon={<IconCapMicrophone class="size-4" />}
 						>
 							<Slider
@@ -663,7 +665,7 @@ export function ConfigSidebar() {
 					)}
 					{meta().hasSystemAudio && (
 						<Field
-							name="System Audio Volume"
+							name={t("System Audio Volume")}
 							icon={<IconLucideMonitor class="size-4" />}
 						>
 							<Slider
@@ -685,7 +687,7 @@ export function ConfigSidebar() {
 					class="flex flex-col flex-1 gap-6 p-4 min-h-0"
 				>
 					<Field
-						name="Show cursor"
+						name={t("Show cursor")}
 						value={
 							<Toggle
 								checked={!project.cursor.hide}
@@ -696,7 +698,7 @@ export function ConfigSidebar() {
 						}
 					/>
 					<Show when={!project.cursor.hide}>
-						<Field name="Cursor Type" icon={<IconCapCursor />}>
+						<Field name={t("Cursor Type")} icon={<IconCapCursor />}>
 							<RadioGroup
 								class="flex flex-col gap-2"
 								value={project.cursor.type}
@@ -714,10 +716,10 @@ export function ConfigSidebar() {
 											<RadioGroup.ItemControl class="mt-1 size-4 rounded-full border border-gray-7 data-checked:border-blue-9 data-checked:bg-blue-9" />
 											<div class="flex flex-col text-left">
 												<span class="text-sm font-medium text-gray-12">
-													{option.label}
+													{t(option.label)}
 												</span>
 												<span class="text-xs text-gray-11">
-													{option.description}
+													{t(option.description)}
 												</span>
 											</div>
 										</RadioGroup.ItemLabel>
@@ -725,7 +727,7 @@ export function ConfigSidebar() {
 								))}
 							</RadioGroup>
 						</Field>
-						<Field name="Size" icon={<IconCapEnlarge />}>
+						<Field name={t("Size")} icon={<IconCapEnlarge />}>
 							<Slider
 								value={[project.cursor.size]}
 								onChange={(v) => setProject("cursor", "size", v[0])}
@@ -734,7 +736,10 @@ export function ConfigSidebar() {
 								step={1}
 							/>
 						</Field>
-						<Field name="Tilt" icon={<IconLucideRotate3d class="size-4" />}>
+						<Field
+							name={t("Tilt")}
+							icon={<IconLucideRotate3d class="size-4" />}
+						>
 							<Slider
 								value={[project.cursor.rotationAmount ?? 0.15]}
 								onChange={(v) => setProject("cursor", "rotationAmount", v[0])}
@@ -745,7 +750,7 @@ export function ConfigSidebar() {
 							/>
 						</Field>
 						<Field
-							name="Hide When Idle"
+							name={t("Hide When Idle")}
 							icon={<IconLucideTimer class="size-4" />}
 							value={
 								<Toggle
@@ -757,7 +762,7 @@ export function ConfigSidebar() {
 							}
 						/>
 						<Show when={project.cursor.hideWhenIdle}>
-							<Subfield name="Inactivity Delay" class="gap-4 items-center">
+							<Subfield name={t("Inactivity Delay")} class="gap-4 items-center">
 								<div class="flex flex-1 gap-3 items-center">
 									<Slider
 										class="flex-1"
@@ -778,7 +783,7 @@ export function ConfigSidebar() {
 							</Subfield>
 						</Show>
 						<Field
-							name="Cursor Movement Style"
+							name={t("Cursor Movement Style")}
 							icon={<IconLucideRabbit class="size-4" />}
 						>
 							<RadioGroup
@@ -798,10 +803,10 @@ export function ConfigSidebar() {
 											<RadioGroup.ItemControl class="mt-1 size-4 rounded-full border border-gray-7 data-checked:border-blue-9 data-checked:bg-blue-9" />
 											<div class="flex flex-col text-left">
 												<span class="text-sm font-medium text-gray-12">
-													{option.label}
+													{t(option.label)}
 												</span>
 												<span class="text-xs text-gray-11">
-													{option.description}
+													{t(option.description)}
 												</span>
 											</div>
 										</RadioGroup.ItemLabel>
@@ -811,7 +816,7 @@ export function ConfigSidebar() {
 						</Field>
 						<KCollapsible open={!project.cursor.raw}>
 							<Field
-								name="Smooth Movement"
+								name={t("Smooth Movement")}
 								icon={<IconHugeiconsEaseCurveControlPoints />}
 								value={
 									<Toggle
@@ -825,7 +830,7 @@ export function ConfigSidebar() {
 							<KCollapsible.Content class="overflow-hidden border-b opacity-0 transition-opacity border-gray-3 animate-collapsible-up data-expanded:animate-collapsible-down data-expanded:opacity-100">
 								{/* if Content has padding or margin the animation doesn't look as good */}
 								<div class="flex flex-col gap-4 pt-4 pb-6">
-									<Field name="Tension">
+									<Field name={t("Tension")}>
 										<Slider
 											value={[project.cursor.tension]}
 											onChange={(v) => setCursorPhysics("tension", v[0])}
@@ -834,7 +839,7 @@ export function ConfigSidebar() {
 											step={1}
 										/>
 									</Field>
-									<Field name="Friction">
+									<Field name={t("Friction")}>
 										<Slider
 											value={[project.cursor.friction]}
 											onChange={(v) => setCursorPhysics("friction", v[0])}
@@ -843,7 +848,7 @@ export function ConfigSidebar() {
 											step={0.1}
 										/>
 									</Field>
-									<Field name="Mass">
+									<Field name={t("Mass")}>
 										<Slider
 											value={[project.cursor.mass]}
 											onChange={(v) => setCursorPhysics("mass", v[0])}
@@ -856,7 +861,7 @@ export function ConfigSidebar() {
 							</KCollapsible.Content>
 						</KCollapsible>
 						<Field
-							name="High Quality SVG Cursors"
+							name={t("High Quality SVG Cursors")}
 							icon={<IconLucideSparkles />}
 							value={
 								<Toggle
@@ -869,7 +874,7 @@ export function ConfigSidebar() {
 						/>
 					</Show>
 
-					{/* <Field name="Animation Style" icon={<IconLucideRabbit />}>
+					{/* <Field name={t("Animation Style")} icon={<IconLucideRabbit />}>
             <RadioGroup
               defaultValue="regular"
               value={project.cursor.animationStyle}
@@ -916,9 +921,9 @@ export function ConfigSidebar() {
           </Field> */}
 				</KTabs.Content>
 				<KTabs.Content value="hotkeys" class="flex flex-1 p-4 min-h-0">
-					<Field name="Hotkeys" icon={<IconCapHotkeys />}>
+					<Field name={t("Hotkeys")} icon={<IconCapHotkeys />}>
 						<ComingSoonTooltip>
-							<Subfield name="Show hotkeys">
+							<Subfield name={t("Show hotkeys")}>
 								<Toggle disabled />
 							</Subfield>
 						</ComingSoonTooltip>
@@ -988,14 +993,14 @@ export function ConfigSidebar() {
 													}
 													leftIcon={<IconLucideCheck />}
 												>
-													Done
+													{t("Done")}
 												</EditorButton>
 												<span class="text-sm text-gray-10">
-													{value().segments.length} caption{" "}
+													{value().segments.length} {t("caption")}{" "}
 													{value().segments.length === 1
-														? "segment"
-														: "segments"}{" "}
-													selected
+														? t("segment")
+														: t("segments")}{" "}
+													{t("selected")}
 												</span>
 											</div>
 											<EditorButton
@@ -1007,7 +1012,7 @@ export function ConfigSidebar() {
 												}
 												leftIcon={<IconCapTrash />}
 											>
-												Delete
+												{t("Delete")}
 											</EditorButton>
 										</div>
 										<For each={value().segments}>
@@ -1061,14 +1066,14 @@ export function ConfigSidebar() {
 													}}
 													leftIcon={<IconLucideCheck />}
 												>
-													Done
+													{t("Done")}
 												</EditorButton>
 												<span class="text-sm text-gray-10">
-													{value().segments.length} keyboard{" "}
+													{value().segments.length} {t("keyboard")}{" "}
 													{value().segments.length === 1
-														? "segment"
-														: "segments"}{" "}
-													selected
+														? t("segment")
+														: t("segments")}{" "}
+													{t("selected")}
 												</span>
 											</div>
 											<EditorButton
@@ -1080,7 +1085,7 @@ export function ConfigSidebar() {
 												}
 												leftIcon={<IconCapTrash />}
 											>
-												Delete
+												{t("Delete")}
 											</EditorButton>
 										</div>
 										<For each={value().segments}>
@@ -1128,14 +1133,14 @@ export function ConfigSidebar() {
 													}
 													leftIcon={<IconLucideCheck />}
 												>
-													Done
+													{t("Done")}
 												</EditorButton>
 												<span class="text-sm text-gray-10">
-													{value().segments.length} text{" "}
+													{value().segments.length} {t("text")}{" "}
 													{value().segments.length === 1
-														? "segment"
-														: "segments"}{" "}
-													selected
+														? t("segment")
+														: t("segments")}{" "}
+													{t("selected")}
 												</span>
 											</div>
 											<EditorButton
@@ -1147,7 +1152,7 @@ export function ConfigSidebar() {
 												}
 												leftIcon={<IconCapTrash />}
 											>
-												Delete
+												{t("Delete")}
 											</EditorButton>
 										</div>
 										<For each={value().segments}>
@@ -1196,14 +1201,14 @@ export function ConfigSidebar() {
 													}
 													leftIcon={<IconLucideCheck />}
 												>
-													Done
+													{t("Done")}
 												</EditorButton>
 												<span class="text-sm text-gray-10">
-													{value().segments.length} mask{" "}
+													{value().segments.length} {t("mask")}{" "}
 													{value().segments.length === 1
-														? "segment"
-														: "segments"}{" "}
-													selected
+														? t("segment")
+														: t("segments")}{" "}
+													{t("selected")}
 												</span>
 											</div>
 											<EditorButton
@@ -1215,7 +1220,7 @@ export function ConfigSidebar() {
 												}
 												leftIcon={<IconCapTrash />}
 											>
-												Delete
+												{t("Delete")}
 											</EditorButton>
 										</div>
 										<For each={value().segments}>
@@ -1263,14 +1268,14 @@ export function ConfigSidebar() {
 													}
 													leftIcon={<IconLucideCheck />}
 												>
-													Done
+													{t("Done")}
 												</EditorButton>
 												<span class="text-sm text-gray-10">
-													{value().segments.length} zoom{" "}
+													{value().segments.length} {t("zoom")}{" "}
 													{value().segments.length === 1
-														? "segment"
-														: "segments"}{" "}
-													selected
+														? t("segment")
+														: t("segments")}{" "}
+													{t("selected")}
 												</span>
 											</div>
 											<EditorButton
@@ -1282,7 +1287,7 @@ export function ConfigSidebar() {
 												}}
 												leftIcon={<IconCapTrash />}
 											>
-												Delete
+												{t("Delete")}
 											</EditorButton>
 										</div>
 										<Show
@@ -1356,14 +1361,14 @@ export function ConfigSidebar() {
 																}
 																leftIcon={<IconLucideCheck />}
 															>
-																Done
+																{t("Done")}
 															</EditorButton>
 															<span class="text-sm text-gray-10">
-																{value().segments.length} scene{" "}
+																{value().segments.length} {t("scene")}{" "}
 																{value().segments.length === 1
-																	? "segment"
-																	: "segments"}{" "}
-																selected
+																	? t("segment")
+																	: t("segments")}{" "}
+																{t("selected")}
 															</span>
 														</div>
 														<EditorButton
@@ -1380,7 +1385,7 @@ export function ConfigSidebar() {
 															}}
 															leftIcon={<IconCapTrash />}
 														>
-															Delete
+															{t("Delete")}
 														</EditorButton>
 													</div>
 												</div>
@@ -1429,14 +1434,14 @@ export function ConfigSidebar() {
 																}
 																leftIcon={<IconLucideCheck />}
 															>
-																Done
+																{t("Done")}
 															</EditorButton>
 															<span class="text-sm text-gray-10">
-																{value().segments.length} clip{" "}
+																{value().segments.length} {t("clip")}{" "}
 																{value().segments.length === 1
-																	? "segment"
-																	: "segments"}{" "}
-																selected
+																	? t("segment")
+																	: t("segments")}{" "}
+																{t("selected")}
 															</span>
 														</div>
 														<EditorButton
@@ -1453,7 +1458,7 @@ export function ConfigSidebar() {
 															}}
 															leftIcon={<IconCapTrash />}
 														>
-															Delete
+															{t("Delete")}
 														</EditorButton>
 													</div>
 												</div>
@@ -1476,6 +1481,7 @@ function BackgroundConfig(props: {
 }) {
 	const { project, setProject, editorInstance, projectHistory } =
 		useEditorContext();
+	const { t } = useI18n();
 	const isNoneBackground = () =>
 		project.background.padding === 0 && project.background.rounding === 0;
 	const initialCurrentDesktopBackgroundPath = () => {
@@ -1652,7 +1658,7 @@ function BackgroundConfig(props: {
 
 								setWallpaperSource(rawPath);
 							} catch (_err) {
-								toast.error("Failed to set wallpaper");
+								toast.error(t("Failed to set wallpaper"));
 							}
 						};
 
@@ -1748,7 +1754,7 @@ function BackgroundConfig(props: {
 				ensureBackgroundPresentation(addingFromBlankBackground);
 			});
 		} catch (_err) {
-			toast.error("Couldn't import your desktop wallpaper");
+			toast.error(t("Couldn't import your desktop wallpaper"));
 		} finally {
 			setImportingDesktopBackground(false);
 		}
@@ -1828,7 +1834,7 @@ function BackgroundConfig(props: {
 			)}
 		>
 			{renderBackgroundSourceIcon(props.item)}
-			{BACKGROUND_SOURCES[props.item]}
+			{t(BACKGROUND_SOURCES[props.item])}
 		</KTabs.Trigger>
 	);
 
@@ -1886,7 +1892,10 @@ function BackgroundConfig(props: {
 
 	return (
 		<KTabs.Content value={TAB_IDS.background} class="flex flex-col gap-6 p-4">
-			<Field icon={<IconCapImage class="size-4" />} name="Background Image">
+			<Field
+				icon={<IconCapImage class="size-4" />}
+				name={t("Background Image")}
+			>
 				<KTabs
 					value={backgroundSourceTab()}
 					onChange={(v) => {
@@ -2104,7 +2113,7 @@ function BackgroundConfig(props: {
 
 									ensureBackgroundPresentation();
 								} catch (_err) {
-									toast.error("Failed to set wallpaper");
+									toast.error(t("Failed to set wallpaper"));
 								}
 							}}
 							class="grid grid-cols-7 gap-2 h-auto"
@@ -2115,7 +2124,7 @@ function BackgroundConfig(props: {
 									<div class="flex col-span-7 justify-center items-center h-32 text-gray-11">
 										<div class="flex flex-col gap-2 items-center">
 											<div class="w-6 h-6 rounded-full border-2 animate-spin border-gray-5 border-t-blue-400" />
-											<span>Loading wallpapers...</span>
+											<span>{t("Loading wallpapers...")}</span>
 										</div>
 									</div>
 								}
@@ -2219,7 +2228,7 @@ function BackgroundConfig(props: {
 
 								const extension = getValidBackgroundImageExtension(file);
 								if (!extension) {
-									toast.error("Invalid image file type");
+									toast.error(t("Invalid image file type"));
 									return;
 								}
 
@@ -2239,7 +2248,7 @@ function BackgroundConfig(props: {
 										path: fullPath,
 									});
 								} catch (_err) {
-									toast.error("Failed to save image");
+									toast.error(t("Failed to save image"));
 								}
 							}}
 						/>
@@ -2335,7 +2344,7 @@ function BackgroundConfig(props: {
 				</KTabs>
 			</Field>
 
-			<Field name="Background Blur" icon={<IconCapBgBlur />}>
+			<Field name={t("Background Blur")} icon={<IconCapBgBlur />}>
 				<Slider
 					value={[project.background.blur]}
 					onChange={(v) => setProject("background", "blur", v[0])}
@@ -2347,7 +2356,7 @@ function BackgroundConfig(props: {
 			</Field>
 			{/** Dashed divider */}
 			<div class="w-full border-t border-gray-300 border-dashed" />
-			<Field name="Padding" icon={<IconCapPadding class="size-4" />}>
+			<Field name={t("Padding")} icon={<IconCapPadding class="size-4" />}>
 				<Slider
 					value={[project.background.padding]}
 					onChange={(v) => setBackgroundDimension("padding", v[0])}
@@ -2357,7 +2366,10 @@ function BackgroundConfig(props: {
 					formatTooltip="%"
 				/>
 			</Field>
-			<Field name="Rounded Corners" icon={<IconCapCorners class="size-4" />}>
+			<Field
+				name={t("Rounded Corners")}
+				icon={<IconCapCorners class="size-4" />}
+			>
 				<div class="flex flex-col gap-3">
 					<Slider
 						value={[project.background.rounding]}
@@ -2368,7 +2380,7 @@ function BackgroundConfig(props: {
 						formatTooltip="%"
 					/>
 					<CornerStyleSelect
-						label="Corner Style"
+						label={t("Corner Style")}
 						value={project.background.roundingType}
 						onChange={(value) =>
 							setProject("background", "roundingType", value)
@@ -2376,7 +2388,7 @@ function BackgroundConfig(props: {
 					/>
 				</div>
 			</Field>
-			<Field name="Motion Blur" icon={<IconLucideWind class="size-4" />}>
+			<Field name={t("Motion Blur")} icon={<IconLucideWind class="size-4" />}>
 				<Slider
 					value={[
 						project.screenMotionBlur ??
@@ -2397,7 +2409,7 @@ function BackgroundConfig(props: {
 				/>
 			</Field>
 			<Field
-				name="Border"
+				name={t("Border")}
 				icon={<IconCapSettings class="size-4" />}
 				value={
 					<Toggle
@@ -2432,7 +2444,10 @@ function BackgroundConfig(props: {
 			<KCollapsible open={project.background.border?.enabled ?? false}>
 				<KCollapsible.Content class="overflow-hidden opacity-0 transition-opacity animate-collapsible-up data-expanded:animate-collapsible-down data-expanded:opacity-100">
 					<div class="flex flex-col gap-6 pb-6">
-						<Field name="Border Width" icon={<IconCapEnlarge class="size-4" />}>
+						<Field
+							name={t("Border Width")}
+							icon={<IconCapEnlarge class="size-4" />}
+						>
 							<Slider
 								value={[project.background.border?.width ?? 5.0]}
 								onChange={(v) =>
@@ -2452,7 +2467,10 @@ function BackgroundConfig(props: {
 								formatTooltip="px"
 							/>
 						</Field>
-						<Field name="Border Color" icon={<IconCapImage class="size-4" />}>
+						<Field
+							name={t("Border Color")}
+							icon={<IconCapImage class="size-4" />}
+						>
 							<div class="flex flex-col gap-2">
 								<RgbInput
 									value={project.background.border?.color ?? [0, 0, 0]}
@@ -2475,7 +2493,7 @@ function BackgroundConfig(props: {
 							</div>
 						</Field>
 						<Field
-							name="Border Opacity"
+							name={t("Border Opacity")}
 							icon={<IconCapShadow class="size-4" />}
 						>
 							<Slider
@@ -2500,7 +2518,7 @@ function BackgroundConfig(props: {
 					</div>
 				</KCollapsible.Content>
 			</KCollapsible>
-			<Field name="Shadow" icon={<IconCapShadow class="size-4" />}>
+			<Field name={t("Shadow")} icon={<IconCapShadow class="size-4" />}>
 				<Slider
 					value={[project.background.shadow ?? 0]}
 					onChange={(v) => {
@@ -2566,7 +2584,7 @@ function BackgroundConfig(props: {
 				/>
 			</Field>
 			{/* <ComingSoonTooltip>
-            <Field name="Inset" icon={<IconCapInset />}>
+            <Field name={t("Inset")} icon={<IconCapInset />}>
               <Slider
                 disabled
                 value={[project.background.inset]}
@@ -2582,16 +2600,17 @@ function BackgroundConfig(props: {
 
 function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 	const { project, setProject } = useEditorContext();
+	const { t } = useI18n();
 
 	return (
 		<KTabs.Content
 			value={TAB_IDS.camera}
 			class="flex flex-col flex-1 gap-6 p-4 min-h-0"
 		>
-			<Field icon={<IconCapCamera class="size-4" />} name="Camera">
+			<Field icon={<IconCapCamera class="size-4" />} name={t("Camera")}>
 				<div class="flex flex-col gap-6">
 					<div>
-						<Subfield name="Position" />
+						<Subfield name={t("Position")} />
 						<KRadioGroup
 							value={`${project.camera.position.x}:${project.camera.position.y}`}
 							onChange={(v) => {
@@ -2641,19 +2660,19 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 							</For>
 						</KRadioGroup>
 					</div>
-					<Subfield name="Hide Camera">
+					<Subfield name={t("Hide Camera")}>
 						<Toggle
 							checked={project.camera.hide}
 							onChange={(hide) => setProject("camera", "hide", hide)}
 						/>
 					</Subfield>
-					<Subfield name="Mirror Camera">
+					<Subfield name={t("Mirror Camera")}>
 						<Toggle
 							checked={project.camera.mirror}
 							onChange={(mirror) => setProject("camera", "mirror", mirror)}
 						/>
 					</Subfield>
-					<Subfield name="Background Blur">
+					<Subfield name={t("Background Blur")}>
 						<KSelect<{ name: string; value: BackgroundBlurMode }>
 							options={[
 								{ name: "Off", value: "off" },
@@ -2687,7 +2706,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 									item={props.item}
 								>
 									<KSelect.ItemLabel class="flex-1">
-										{props.item.rawValue.name}
+										{t(props.item.rawValue.name)}
 									</KSelect.ItemLabel>
 								</MenuItem>
 							)}
@@ -2697,7 +2716,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 									name: string;
 									value: string;
 								}> class="flex-1 text-sm text-left truncate text-(--gray-500) font-normal">
-									{(state) => <span>{state.selectedOption().name}</span>}
+									{(state) => <span>{t(state.selectedOption().name)}</span>}
 								</KSelect.Value>
 								<KSelect.Icon<ValidComponent>
 									as={(iconProps) => (
@@ -2721,7 +2740,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 							</KSelect.Portal>
 						</KSelect>
 					</Subfield>
-					<Subfield name="Shape">
+					<Subfield name={t("Shape")}>
 						<KSelect<{ name: string; value: CameraShape }>
 							options={CAMERA_SHAPES}
 							optionValue="value"
@@ -2739,7 +2758,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 									item={props.item}
 								>
 									<KSelect.ItemLabel class="flex-1">
-										{props.item.rawValue.name}
+										{t(props.item.rawValue.name)}
 									</KSelect.ItemLabel>
 								</MenuItem>
 							)}
@@ -2749,7 +2768,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 									name: string;
 									value: StereoMode;
 								}> class="flex-1 text-sm text-left truncate text-(--gray-500) font-normal">
-									{(state) => <span>{state.selectedOption().name}</span>}
+									{(state) => <span>{t(state.selectedOption().name)}</span>}
 								</KSelect.Value>
 								<KSelect.Icon<ValidComponent>
 									as={(props) => (
@@ -2774,7 +2793,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 						</KSelect>
 					</Subfield>
 
-					{/* <Subfield name="Use Camera Aspect Ratio">
+					{/* <Subfield name={t("Use Camera Aspect Ratio")}>
             <Toggle
               checked={project.camera.use_camera_aspect}
               onChange={(v) => setProject("camera", "use_camera_aspect", v)}
@@ -2784,7 +2803,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 			</Field>
 			{/** Dashed divider */}
 			<div class="w-full border-t border-dashed border-gray-5" />
-			<Field name="Size" icon={<IconCapEnlarge class="size-4" />}>
+			<Field name={t("Size")} icon={<IconCapEnlarge class="size-4" />}>
 				<Slider
 					value={[project.camera.size]}
 					onChange={(v) => setProject("camera", "size", v[0])}
@@ -2794,7 +2813,10 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 					formatTooltip="%"
 				/>
 			</Field>
-			<Field name="Size During Zoom" icon={<IconCapEnlarge class="size-4" />}>
+			<Field
+				name={t("Size During Zoom")}
+				icon={<IconCapEnlarge class="size-4" />}
+			>
 				<Slider
 					value={[project.camera.zoomSize ?? 60]}
 					onChange={(v) => setProject("camera", "zoomSize", v[0])}
@@ -2804,7 +2826,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 					formatTooltip="%"
 				/>
 			</Field>
-			<Subfield name="Keep original size during zoom">
+			<Subfield name={t("Keep original size during zoom")}>
 				<Toggle
 					checked={
 						(project.camera.scaleDuringZoom ??
@@ -2819,7 +2841,10 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 					}
 				/>
 			</Subfield>
-			<Field name="Rounded Corners" icon={<IconCapCorners class="size-4" />}>
+			<Field
+				name={t("Rounded Corners")}
+				icon={<IconCapCorners class="size-4" />}
+			>
 				<div class="flex flex-col gap-3">
 					<Slider
 						value={[project.camera.rounding ?? 0]}
@@ -2830,13 +2855,13 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 						formatTooltip="%"
 					/>
 					<CornerStyleSelect
-						label="Corner Style"
+						label={t("Corner Style")}
 						value={project.camera.roundingType}
 						onChange={(value) => setProject("camera", "roundingType", value)}
 					/>
 				</div>
 			</Field>
-			<Field name="Shadow" icon={<IconCapShadow class="size-4" />}>
+			<Field name={t("Shadow")} icon={<IconCapShadow class="size-4" />}>
 				<div class="space-y-8">
 					<Slider
 						value={[project.camera.shadow ?? 0]}
@@ -2891,7 +2916,7 @@ function CameraConfig(props: { scrollRef: HTMLDivElement }) {
 				</div>
 			</Field>
 			{/* <ComingSoonTooltip>
-            <Field name="Shadow" icon={<IconCapShadow />}>
+            <Field name={t("Shadow")} icon={<IconCapShadow />}>
               <Slider
                 disabled
                 value={[project.camera.shadow]}
@@ -2910,6 +2935,7 @@ function CornerStyleSelect(props: {
 	value: CornerRoundingType;
 	onChange: (value: CornerRoundingType) => void;
 }) {
+	const { t } = useI18n();
 	return (
 		<div class="flex flex-col gap-1.5">
 			<Show when={props.label}>
@@ -2944,7 +2970,7 @@ function CornerStyleSelect(props: {
 						name: string;
 						value: CornerRoundingType;
 					}> class="flex-1 text-sm text-left truncate text-(--gray-500) font-normal">
-						{(state) => <span>{state.selectedOption().name}</span>}
+						{(state) => <span>{t(state.selectedOption().name)}</span>}
 					</KSelect.Value>
 					<KSelect.Icon<ValidComponent>
 						as={(iconProps) => (
@@ -3047,6 +3073,7 @@ function TextSegmentConfig(props: {
 	brandColorSwatches: OrganizationBrandColorSwatch[];
 }) {
 	const { setProject } = useEditorContext();
+	const { t } = useI18n();
 	const clampNumber = (value: number, min: number, max: number) =>
 		Math.min(Math.max(Number.isFinite(value) ? value : min), max);
 
@@ -3079,7 +3106,7 @@ function TextSegmentConfig(props: {
 						}
 					/>
 					<div class="flex flex-col items-center gap-2">
-						<span class="text-xs text-gray-11">Enabled</span>
+						<span class="text-xs text-gray-11">{t("Enabled")}</span>
 						<Toggle
 							checked={props.segment.enabled}
 							onChange={(value) =>
@@ -3091,7 +3118,7 @@ function TextSegmentConfig(props: {
 					</div>
 				</div>
 			</Field>
-			<Field name="Size" icon={<IconCapEnlarge class="size-4" />}>
+			<Field name={t("Size")} icon={<IconCapEnlarge class="size-4" />}>
 				<Slider
 					value={[clampNumber(props.segment.fontSize, 8, 200)]}
 					onChange={([value]) =>
@@ -3118,7 +3145,7 @@ function TextSegmentConfig(props: {
 					step={1}
 				/>
 			</Field>
-			<Field name="Style" icon={<IconLucideSparkles class="size-4" />}>
+			<Field name={t("Style")} icon={<IconLucideSparkles class="size-4" />}>
 				<div class="flex flex-col gap-2">
 					<KSelect
 						options={[
@@ -3144,7 +3171,7 @@ function TextSegmentConfig(props: {
 								item={selectItemProps.item}
 							>
 								<KSelect.ItemLabel class="flex-1">
-									{selectItemProps.item.rawValue.label}
+									{t(selectItemProps.item.rawValue.label)}
 								</KSelect.ItemLabel>
 								<KSelect.ItemIndicator class="ml-auto text-blue-9">
 									<IconCapCircleCheck />
@@ -3186,7 +3213,7 @@ function TextSegmentConfig(props: {
 					</KSelect>
 
 					<div class="flex items-center justify-between pt-1">
-						<span class="text-xs text-gray-11">Italic</span>
+						<span class="text-xs text-gray-11">{t("Italic")}</span>
 						<Toggle
 							checked={props.segment.italic}
 							onChange={(value) =>
@@ -3198,7 +3225,7 @@ function TextSegmentConfig(props: {
 					</div>
 				</div>
 			</Field>
-			<Field name="Color" icon={<IconLucidePalette class="size-4" />}>
+			<Field name={t("Color")} icon={<IconLucidePalette class="size-4" />}>
 				<HexColorInput
 					value={props.segment.color}
 					brandColorSwatches={props.brandColorSwatches}
@@ -3209,7 +3236,10 @@ function TextSegmentConfig(props: {
 					}
 				/>
 			</Field>
-			<Field name="Fade Duration" icon={<IconLucideTimer class="size-4" />}>
+			<Field
+				name={t("Fade Duration")}
+				icon={<IconLucideTimer class="size-4" />}
+			>
 				<Slider
 					value={[clampNumber(props.segment.fadeDuration ?? 0.15, 0, 1)]}
 					onChange={([value]) =>
@@ -3232,6 +3262,7 @@ function KeyboardSegmentConfig(props: {
 	segment: KeyboardTrackSegment;
 }) {
 	const { setProject } = useEditorContext();
+	const { t } = useI18n();
 
 	const updateSegment = (fn: (segment: KeyboardTrackSegment) => void) => {
 		setProject(
@@ -3261,12 +3292,12 @@ function KeyboardSegmentConfig(props: {
 					}
 				/>
 			</Field>
-			<Field name="Timing" icon={<IconLucideTimer class="size-4" />}>
+			<Field name={t("Timing")} icon={<IconLucideTimer class="size-4" />}>
 				<div class="rounded-xl border border-gray-3 bg-gray-2/70 p-3 space-y-3">
 					<div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-start">
 						<div class="rounded-lg border border-gray-3 bg-gray-1/80 p-2.5 space-y-2">
 							<div class="flex items-center justify-between text-[10px] uppercase tracking-[0.08em] text-gray-10">
-								<span>Start</span>
+								<span>{t("Start")}</span>
 								<span>{formatTime(props.segment.start)}</span>
 							</div>
 							<Input
@@ -3281,10 +3312,10 @@ function KeyboardSegmentConfig(props: {
 								}
 							/>
 						</div>
-						<div class="pt-10 text-xs font-medium text-gray-10">to</div>
+						<div class="pt-10 text-xs font-medium text-gray-10">{t("to")}</div>
 						<div class="rounded-lg border border-gray-3 bg-gray-1/80 p-2.5 space-y-2">
 							<div class="flex items-center justify-between text-[10px] uppercase tracking-[0.08em] text-gray-10">
-								<span>End</span>
+								<span>{t("End")}</span>
 								<span>{formatTime(props.segment.end)}</span>
 							</div>
 							<Input
@@ -3301,14 +3332,17 @@ function KeyboardSegmentConfig(props: {
 						</div>
 					</div>
 					<div class="flex items-center justify-between rounded-lg bg-gray-1/70 px-3 py-2 text-xs text-gray-11">
-						<span>Duration</span>
+						<span>{t("Duration")}</span>
 						<span class="font-medium text-gray-12">
 							{Math.max(0, props.segment.end - props.segment.start).toFixed(2)}s
 						</span>
 					</div>
 				</div>
 			</Field>
-			<Field name="Fade Duration" icon={<IconLucideTimer class="size-4" />}>
+			<Field
+				name={t("Fade Duration")}
+				icon={<IconLucideTimer class="size-4" />}
+			>
 				<Slider
 					value={[(props.segment.fadeDurationOverride ?? 0.15) * 100]}
 					onChange={([value]) =>
@@ -3330,6 +3364,7 @@ function CaptionSegmentConfig(props: {
 	segment: CaptionTrackSegment;
 }) {
 	const { setProject } = useEditorContext();
+	const { t } = useI18n();
 
 	const updateSegment = (fn: (segment: CaptionTrackSegment) => void) => {
 		setProject(
@@ -3375,12 +3410,12 @@ function CaptionSegmentConfig(props: {
 					}
 				/>
 			</Field>
-			<Field name="Timing" icon={<IconLucideTimer class="size-4" />}>
+			<Field name={t("Timing")} icon={<IconLucideTimer class="size-4" />}>
 				<div class="rounded-xl border border-gray-3 bg-gray-2/70 p-3 space-y-3">
 					<div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-start">
 						<div class="rounded-lg border border-gray-3 bg-gray-1/80 p-2.5 space-y-2">
 							<div class="flex items-center justify-between text-[10px] uppercase tracking-[0.08em] text-gray-10">
-								<span>Start</span>
+								<span>{t("Start")}</span>
 								<span>{formatTime(props.segment.start)}</span>
 							</div>
 							<Input
@@ -3400,10 +3435,10 @@ function CaptionSegmentConfig(props: {
 								}
 							/>
 						</div>
-						<div class="pt-10 text-xs font-medium text-gray-10">to</div>
+						<div class="pt-10 text-xs font-medium text-gray-10">{t("to")}</div>
 						<div class="rounded-lg border border-gray-3 bg-gray-1/80 p-2.5 space-y-2">
 							<div class="flex items-center justify-between text-[10px] uppercase tracking-[0.08em] text-gray-10">
-								<span>End</span>
+								<span>{t("End")}</span>
 								<span>{formatTime(props.segment.end)}</span>
 							</div>
 							<Input
@@ -3425,7 +3460,7 @@ function CaptionSegmentConfig(props: {
 						</div>
 					</div>
 					<div class="flex items-center justify-between rounded-lg bg-gray-1/70 px-3 py-2 text-xs text-gray-11">
-						<span>Duration</span>
+						<span>{t("Duration")}</span>
 						<span class="font-medium text-gray-12">
 							{Math.max(0, props.segment.end - props.segment.start).toFixed(2)}s
 						</span>
@@ -3442,6 +3477,7 @@ function MaskSegmentConfig(props: {
 }) {
 	const { setProject, editorState } = useEditorContext();
 
+	const { t } = useI18n();
 	const updateSegment = (fn: (segment: MaskSegment) => void) => {
 		setProject(
 			"timeline",
@@ -3531,13 +3567,13 @@ function MaskSegmentConfig(props: {
 								<RadioGroup.ItemInput class="sr-only" />
 								<RadioGroup.ItemLabel class="flex cursor-pointer items-center gap-2 p-2 text-sm text-gray-12">
 									<RadioGroup.ItemControl class="size-4 rounded-full border border-gray-7 data-checked:border-blue-9 data-checked:bg-blue-9" />
-									{option.label}
+									{t(option.label)}
 								</RadioGroup.ItemLabel>
 							</RadioGroup.Item>
 						))}
 					</RadioGroup>
 					<div class="flex items-center gap-2">
-						<span class="text-xs text-gray-11">Enabled</span>
+						<span class="text-xs text-gray-11">{t("Enabled")}</span>
 						<Toggle
 							checked={props.segment.enabled}
 							onChange={(value) =>
@@ -3550,7 +3586,7 @@ function MaskSegmentConfig(props: {
 				</div>
 			</Field>
 			<Show when={props.segment.maskType === "sensitive"}>
-				<Field name="Intensity" icon={<IconLucideGauge class="size-4" />}>
+				<Field name={t("Intensity")} icon={<IconLucideGauge class="size-4" />}>
 					<Slider
 						value={[props.segment.opacity]}
 						onChange={([v]) => setIntensity(v)}
@@ -3562,7 +3598,7 @@ function MaskSegmentConfig(props: {
 				</Field>
 			</Show>
 			<Show when={props.segment.maskType === "sensitive"}>
-				<Field name="Pixelation" icon={<IconLucideGrid class="size-4" />}>
+				<Field name={t("Pixelation")} icon={<IconLucideGrid class="size-4" />}>
 					<Slider
 						value={[props.segment.pixelation]}
 						onChange={([v]) =>
@@ -3577,7 +3613,10 @@ function MaskSegmentConfig(props: {
 				</Field>
 			</Show>
 			<Show when={props.segment.maskType === "highlight"}>
-				<Field name="Outside Darkness" icon={<IconLucideMoon class="size-4" />}>
+				<Field
+					name={t("Outside Darkness")}
+					icon={<IconLucideMoon class="size-4" />}
+				>
 					<Slider
 						value={[props.segment.darkness]}
 						onChange={([v]) =>
@@ -3592,7 +3631,10 @@ function MaskSegmentConfig(props: {
 				</Field>
 			</Show>
 			<Show when={props.segment.maskType === "highlight"}>
-				<Field name="Fade Duration" icon={<IconLucideTimer class="size-4" />}>
+				<Field
+					name={t("Fade Duration")}
+					icon={<IconLucideTimer class="size-4" />}
+				>
 					<Slider
 						value={[props.segment.fadeDuration ?? 0.15]}
 						onChange={([v]) =>
@@ -3615,6 +3657,7 @@ function ZoomSegmentPreview(props: {
 	segmentIndex: number;
 	segment: ZoomSegment;
 }) {
+	const { t } = useI18n();
 	const { project, editorInstance } = useEditorContext();
 
 	const start = createMemo(() => props.segment.start);
@@ -3704,7 +3747,7 @@ function ZoomSegmentPreview(props: {
 		<>
 			<div class="space-y-1.5">
 				<div class="text-xs font-medium text-center text-gray-12">
-					Zoom {props.segmentIndex + 1}
+					{t("Zoom")} {props.segmentIndex + 1}
 				</div>
 				<div class="overflow-hidden relative rounded-sm border aspect-video border-gray-3 bg-gray-3">
 					<canvas
@@ -3716,7 +3759,7 @@ function ZoomSegmentPreview(props: {
 					/>
 					<Show when={!loaded()}>
 						<p class="flex absolute inset-0 justify-center items-center text-xs text-gray-11">
-							Loading...
+							{t("Loading...")}
 						</p>
 					</Show>
 				</div>
@@ -3736,6 +3779,7 @@ function ZoomSegmentConfig(props: {
 	const generalSettings = generalSettingsStore.createQuery();
 	const { project, setProject, editorInstance, projectHistory } =
 		useEditorContext();
+	const { t } = useI18n();
 
 	const states = {
 		manual:
@@ -3767,7 +3811,7 @@ function ZoomSegmentConfig(props: {
 					formatTooltip="x"
 				/>
 			</Field>
-			<Field name="Zoom Mode" icon={<IconCapSettings />}>
+			<Field name={t("Zoom Mode")} icon={<IconCapSettings />}>
 				<KTabs
 					class="space-y-6"
 					value={props.segment.mode === "auto" ? "auto" : "manual"}
@@ -3787,13 +3831,13 @@ function ZoomSegmentConfig(props: {
 							class="z-10 flex-1 py-2.5 text-gray-11 transition-colors duration-100 outline-hidden data-selected:text-gray-12 peer"
 							disabled={!generalSettings.data?.custom_cursor_capture2}
 						>
-							Auto
+							{t("Auto")}
 						</KTabs.Trigger>
 						<KTabs.Trigger
 							value="manual"
 							class="z-10 flex-1 py-2.5 text-gray-11 transition-colors duration-100 outline-hidden data-selected:text-gray-12 peer"
 						>
-							Manual
+							{t("Manual")}
 						</KTabs.Trigger>
 						<KTabs.Indicator class="absolute flex p-px inset-0 transition-transform peer-focus-visible:outline-solid outline-2 outline-blue-9 outline-offset-2 rounded-[0.6rem] overflow-hidden">
 							<div class="flex-1 bg-gray-3" />
@@ -4010,7 +4054,7 @@ function ZoomSegmentConfig(props: {
 											<Show when={!loaded()}>
 												<div class="flex absolute inset-0 justify-center items-center bg-gray-2">
 													<div class="text-sm text-gray-11">
-														Loading preview...
+														{t("Loading preview...")}
 													</div>
 												</div>
 											</Show>
@@ -4030,6 +4074,7 @@ function ClipSegmentConfig(props: {
 	segmentIndex: number;
 	segment: TimelineSegment;
 }) {
+	const { t } = useI18n();
 	const { setProject, setEditorState, project, projectActions, meta } =
 		useEditorContext();
 
@@ -4066,7 +4111,7 @@ function ClipSegmentConfig(props: {
 						onClick={() => setEditorState("timeline", "selection", null)}
 						leftIcon={<IconLucideCheck />}
 					>
-						Done
+						{t("Done")}
 					</EditorButton>
 				</div>
 				<EditorButton
@@ -4077,20 +4122,20 @@ function ClipSegmentConfig(props: {
 					disabled={(project.timeline?.segments.length ?? 0) < 2}
 					leftIcon={<IconCapTrash />}
 				>
-					Delete
+					{t("Delete")}
 				</EditorButton>
 			</div>
 
 			<div class="space-y-0.5">
-				<h3 class="font-medium text-gray-12">Segment Settings</h3>
+				<h3 class="font-medium text-gray-12">{t("Segment Settings")}</h3>
 				<p class="text-gray-11">
-					These settings apply to only the selected segment
+					{t("These settings apply to only the selected segment")}
 				</p>
 			</div>
 
-			<Field name="Speed" icon={<IconLucideFastForward class="size-4" />}>
+			<Field name={t("Speed")} icon={<IconLucideFastForward class="size-4" />}>
 				<p class="text-gray-11 -mt-3">
-					Modifying speed will mute this segment's audio.
+					{t("Modifying speed will mute this segment's audio.")}
 				</p>
 
 				<KRadioGroup
@@ -4116,15 +4161,15 @@ function ClipSegmentConfig(props: {
 			</Field>
 
 			<div class="space-y-0.5 pt-2">
-				<h3 class="font-medium text-gray-12">Clip Settings</h3>
+				<h3 class="font-medium text-gray-12">{t("Clip Settings")}</h3>
 				<p class="text-gray-11">
-					These settings apply to all segments for the current clip
+					{t("These settings apply to all segments for the current clip")}
 				</p>
 			</div>
 
 			{meta().hasSystemAudio && (
 				<SourceOffsetField
-					name="System Audio Offset"
+					name={t("System Audio Offset")}
 					value={offsets().system_audio}
 					onChange={(offset) => {
 						setOffset("system_audio", offset);
@@ -4133,7 +4178,7 @@ function ClipSegmentConfig(props: {
 			)}
 			{meta().hasMicrophone && (
 				<SourceOffsetField
-					name="Microphone Offset"
+					name={t("Microphone Offset")}
 					value={offsets().mic}
 					onChange={(offset) => {
 						setOffset("mic", offset);
@@ -4142,7 +4187,7 @@ function ClipSegmentConfig(props: {
 			)}
 			{meta().hasCamera && (
 				<SourceOffsetField
-					name="Camera Offset"
+					name={t("Camera Offset")}
 					value={offsets().camera}
 					onChange={(offset) => {
 						setOffset("camera", offset);
@@ -4151,7 +4196,7 @@ function ClipSegmentConfig(props: {
 			)}
 
 			{/*<ComingSoonTooltip>
-			<Field name="Hide Cursor" disabled value={<Toggle disabled />} />
+			<Field name={t("Hide Cursor")} disabled value={<Toggle disabled />} />
 		</ComingSoonTooltip>
 		<ComingSoonTooltip>
 			<Field
@@ -4280,6 +4325,7 @@ function SceneSegmentConfig(props: {
 }) {
 	const { setProject, setEditorState, projectActions, editorInstance } =
 		useEditorContext();
+	const { t } = useI18n();
 
 	const hasCamera = () =>
 		!editorInstance.recordings.segments.every((s) => s.camera === null);
@@ -4287,13 +4333,13 @@ function SceneSegmentConfig(props: {
 	const description = () => {
 		switch (props.segment.mode) {
 			case "cameraOnly":
-				return "Shows only the camera feed";
+				return t("Shows only the camera feed");
 			case "hideCamera":
-				return "Shows only the screen recording";
+				return t("Shows only the screen recording");
 			case "splitScreen":
-				return "Screen and camera side by side (auto-stacks in portrait)";
+				return t("Screen and camera side by side (auto-stacks in portrait)");
 			default:
-				return "Shows both screen and camera";
+				return t("Shows both screen and camera");
 		}
 	};
 
@@ -4312,7 +4358,7 @@ function SceneSegmentConfig(props: {
 						onClick={() => setEditorState("timeline", "selection", null)}
 						leftIcon={<IconLucideCheck />}
 					>
-						Done
+						{t("Done")}
 					</EditorButton>
 				</div>
 				<EditorButton
@@ -4322,10 +4368,10 @@ function SceneSegmentConfig(props: {
 					}}
 					leftIcon={<IconCapTrash />}
 				>
-					Delete
+					{t("Delete")}
 				</EditorButton>
 			</div>
-			<Field name="Camera Layout" icon={<IconLucideLayout />}>
+			<Field name={t("Camera Layout")} icon={<IconLucideLayout />}>
 				<KTabs
 					class="space-y-3"
 					value={props.segment.mode || "default"}
@@ -4355,15 +4401,15 @@ function SceneSegmentConfig(props: {
 					<KTabs.List class="grid grid-cols-2 gap-2">
 						<KTabs.Trigger value="default" class={SCENE_MODE_TRIGGER_CLASS}>
 							<IconLucideMonitor class="size-3.5" />
-							Default
+							{t("Default")}
 						</KTabs.Trigger>
 						<KTabs.Trigger value="cameraOnly" class={SCENE_MODE_TRIGGER_CLASS}>
 							<IconLucideVideo class="size-3.5" />
-							Camera Only
+							{t("Camera Only")}
 						</KTabs.Trigger>
 						<KTabs.Trigger value="hideCamera" class={SCENE_MODE_TRIGGER_CLASS}>
 							<IconLucideEyeOff class="size-3.5" />
-							Hide Camera
+							{t("Hide Camera")}
 						</KTabs.Trigger>
 						<KTabs.Trigger
 							value="splitScreen"
@@ -4371,7 +4417,7 @@ function SceneSegmentConfig(props: {
 							class={SCENE_MODE_TRIGGER_CLASS}
 						>
 							<IconLucideColumns2 class="size-3.5" />
-							Split Screen
+							{t("Split Screen")}
 						</KTabs.Trigger>
 					</KTabs.List>
 					<div class="p-2.5 rounded-md bg-gray-2 border border-gray-3">
@@ -4380,9 +4426,9 @@ function SceneSegmentConfig(props: {
 				</KTabs>
 			</Field>
 
-			<Field name="Transition" icon={<IconLucideTimer class="size-4" />}>
+			<Field name={t("Transition")} icon={<IconLucideTimer class="size-4" />}>
 				<div class="flex flex-col gap-3">
-					<Subfield name="In">
+					<Subfield name={t("In")}>
 						<Slider
 							class="flex-1 ml-4"
 							value={[props.segment.transitionIn ?? DEFAULT_SCENE_TRANSITION]}
@@ -4401,7 +4447,7 @@ function SceneSegmentConfig(props: {
 							formatTooltip={(v) => `${v.toFixed(2)}s`}
 						/>
 					</Subfield>
-					<Subfield name="Out">
+					<Subfield name={t("Out")}>
 						<Slider
 							class="flex-1 ml-4"
 							value={[props.segment.transitionOut ?? DEFAULT_SCENE_TRANSITION]}
@@ -4425,7 +4471,7 @@ function SceneSegmentConfig(props: {
 
 			<Show when={props.segment.mode === "splitScreen"}>
 				<div class="w-full border-t border-dashed border-gray-5" />
-				<Field name="Screen Zoom" icon={<IconCapEnlarge class="size-4" />}>
+				<Field name={t("Screen Zoom")} icon={<IconCapEnlarge class="size-4" />}>
 					<Slider
 						value={[split().screenZoom * 100]}
 						onChange={(v) => updateSplit({ screenZoom: v[0] / 100 })}
@@ -4435,14 +4481,17 @@ function SceneSegmentConfig(props: {
 						formatTooltip="%"
 					/>
 				</Field>
-				<Field name="Screen Position" icon={<IconLucideMove class="size-4" />}>
+				<Field
+					name={t("Screen Position")}
+					icon={<IconLucideMove class="size-4" />}
+				>
 					<PositionPad
 						value={() => split().screenPosition}
 						onChange={(pos) => updateSplit({ screenPosition: pos })}
 					/>
 				</Field>
 				<div class="w-full border-t border-dashed border-gray-5" />
-				<Field name="Camera Zoom" icon={<IconCapEnlarge class="size-4" />}>
+				<Field name={t("Camera Zoom")} icon={<IconCapEnlarge class="size-4" />}>
 					<Slider
 						value={[split().cameraZoom * 100]}
 						onChange={(v) => updateSplit({ cameraZoom: v[0] / 100 })}
@@ -4452,7 +4501,10 @@ function SceneSegmentConfig(props: {
 						formatTooltip="%"
 					/>
 				</Field>
-				<Field name="Camera Position" icon={<IconLucideMove class="size-4" />}>
+				<Field
+					name={t("Camera Position")}
+					icon={<IconLucideMove class="size-4" />}
+				>
 					<PositionPad
 						value={() => split().cameraPosition}
 						onChange={(pos) => updateSplit({ cameraPosition: pos })}

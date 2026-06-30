@@ -20,6 +20,7 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Transition } from "solid-transition-group";
+import { useI18n } from "~/i18n";
 import { createKeyDownSignal } from "~/utils/events";
 
 import { commands } from "~/utils/tauri";
@@ -248,6 +249,7 @@ export function Cropper(
 		allowLightMode?: boolean;
 	}>,
 ) {
+	const { t } = useI18n();
 	let containerRef: HTMLDivElement | undefined;
 	let regionRef: HTMLDivElement | undefined;
 	let occTopRef: HTMLDivElement | undefined;
@@ -1256,7 +1258,7 @@ export function Cropper(
 				<button
 					type="button"
 					class="absolute inset-0 z-20 bg-transparent p-0 m-0 border-0"
-					aria-label="Start selection"
+					aria-label={t("Start selection")}
 					onPointerDown={onOverlayPointerDown}
 					style={{ cursor: cursorStyle() ?? "crosshair" }}
 				/>
@@ -1495,10 +1497,12 @@ export function createCropOptionsMenuItems(options: {
 	snapToRatioEnabled: boolean;
 	onAspectSet: (aspect: Ratio | null) => void;
 	onSnapToRatioSet: (enabled: boolean) => void;
+	t?: (key: string) => string;
 }) {
+	const translate = options.t ?? ((key: string) => key);
 	return [
 		{
-			text: "Free",
+			text: translate("Free"),
 			checked: !options.aspect,
 			action: () => options.onAspectSet(null),
 		} satisfies CheckMenuItemOptions,
@@ -1512,7 +1516,7 @@ export function createCropOptionsMenuItems(options: {
 		),
 		{ item: "Separator" } satisfies PredefinedMenuItemOptions,
 		{
-			text: "Snap to ratios",
+			text: translate("Snap to ratios"),
 			checked: options.snapToRatioEnabled,
 			action: () => options.onSnapToRatioSet(!options.snapToRatioEnabled),
 		} satisfies CheckMenuItemOptions,

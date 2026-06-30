@@ -23,6 +23,7 @@ import { produce } from "solid-js/store";
 import toast from "solid-toast";
 import Tooltip from "~/components/Tooltip";
 import CaptionControlsWindows11 from "~/components/titlebar/controls/CaptionControlsWindows11";
+import { useI18n } from "~/i18n";
 import { trackEvent } from "~/utils/analytics";
 import { commands, type RecordingMetaWithMetadata } from "~/utils/tauri";
 import { initializeTitlebar } from "~/utils/titlebar-state";
@@ -33,6 +34,7 @@ import {
 	transcribeEditorCaptions,
 } from "./captions";
 import { serializeProjectConfiguration, useEditorContext } from "./context";
+import { LanguageDropdown } from "./LanguageDropdown";
 import OrganizationDropdown from "./OrganizationDropdown";
 import PresetsDropdown from "./PresetsDropdown";
 import ShareButton from "./ShareButton";
@@ -66,10 +68,11 @@ type ImportableRecording = {
 const normalizeImportPath = (path: string) =>
 	path.replace(/\\/g, "/").replace(/\/+$/, "");
 
-const recordingModeLabel = (mode: RecordingMetaWithMetadata["mode"]) =>
-	mode === "studio" ? "Studio Mode" : "Instant Mode";
-
 export function Header() {
+	const { t } = useI18n();
+	const recordingModeLabel = (mode: RecordingMetaWithMetadata["mode"]) =>
+		t(mode === "studio" ? "Studio Mode" : "Instant Mode");
+
 	const {
 		editorInstance,
 		project,
@@ -122,7 +125,7 @@ export function Header() {
 
 		clearTimelineSelection();
 		setImportingRecording(true);
-		const toastId = toast.loading("Importing recording...");
+		const toastId = toast.loading(t("Importing recording..."));
 
 		try {
 			if (editorState.playing) {
@@ -135,14 +138,16 @@ export function Header() {
 				await commands.addExistingRecordingToEditor(sourcePath);
 			toast.success(
 				importedCount === 1
-					? "Recording imported"
-					: `${importedCount} recordings imported`,
+					? t("Recording imported")
+					: `${importedCount} ${t("Recording imported")}`,
 				{ id: toastId },
 			);
 			window.location.reload();
 		} catch (error) {
 			const message = error instanceof Error ? error.message : String(error);
-			toast.error(`Failed to import recording: ${message}`, { id: toastId });
+			toast.error(`${t("Failed to import recording:")} ${message}`, {
+				id: toastId,
+			});
 		} finally {
 			setImportingRecording(false);
 		}
@@ -171,11 +176,11 @@ export function Header() {
 		const menu = await Menu.new({
 			items: [
 				await MenuItem.new({
-					text: "Existing Cap Recording...",
+					text: t("Existing Cap Recording..."),
 					action: openExistingRecordingImporter,
 				}),
 				await MenuItem.new({
-					text: "MP4 Video...",
+					text: t("MP4 Video..."),
 					action: () => void pickMp4Recording(),
 				}),
 			],
@@ -232,7 +237,9 @@ export function Header() {
 			);
 			if (result.segments.length < 1) {
 				toast.error(
-					"No captions were generated. The audio might be too quiet or unclear.",
+					t(
+						"No captions were generated. The audio might be too quiet or unclear.",
+					),
 				);
 				return;
 			}
@@ -249,10 +256,10 @@ export function Header() {
 			);
 
 			setEditorState("captions", "isStale", false);
-			toast.success("Captions regenerated!");
+			toast.success(t("Captions regenerated!"));
 		} catch (error) {
 			console.error("Error regenerating captions:", error);
-			toast.error("Failed to regenerate captions");
+			toast.error(t("Failed to regenerate captions"));
 		} finally {
 			setEditorState("captions", "isGenerating", false);
 		}
@@ -277,7 +284,7 @@ export function Header() {
 
 						await commands.editorDeleteProject();
 					}}
-					tooltipText="Delete recording"
+					tooltipText={t("Delete recording")}
 					leftIcon={<IconCapTrash class="w-5" />}
 				/>
 				<EditorButton
@@ -287,13 +294,13 @@ export function Header() {
 						console.log({ path: `${editorInstance.path}/` });
 						revealItemInDir(`${editorInstance.path}/`);
 					}}
-					tooltipText="Open recording bundle"
+					tooltipText={t("Open recording bundle")}
 					leftIcon={<IconLucideFolder class="w-5" />}
 				/>
 				<EditorButton
 					onClick={openImportMenu}
 					disabled={importingRecording()}
-					tooltipText="Import recording"
+					tooltipText={t("Import recording")}
 					leftIcon={<IconLucideImport class="w-5" />}
 				/>
 				<ImportRecordingDialog
@@ -317,7 +324,7 @@ export function Header() {
 					onClick={() => {
 						if (clearTimelineSelection()) return;
 					}}
-					tooltipText="Captions"
+					tooltipText={t("Captions")}
 					leftIcon={<IconCapCaptions class="w-5" />}
 					comingSoon={true}
 				/>
@@ -325,7 +332,7 @@ export function Header() {
 					onClick={() => {
 						if (clearTimelineSelection()) return;
 					}}
-					tooltipText="Performance"
+					tooltipText={t("Performance")}
 					leftIcon={<IconCapGauge class="w-[18px]" />}
 					comingSoon={true}
 				/>
@@ -355,7 +362,7 @@ export function Header() {
 					disabled={
 						!projectHistory.canUndo() && !editorState.timeline.selection
 					}
-					tooltipText="Undo"
+					tooltipText={t("Undo")}
 					leftIcon={<IconCapUndo class="w-5" />}
 				/>
 				<EditorButton
@@ -367,10 +374,11 @@ export function Header() {
 					disabled={
 						!projectHistory.canRedo() && !editorState.timeline.selection
 					}
-					tooltipText="Redo"
+					tooltipText={t("Redo")}
 					leftIcon={<IconCapRedo class="w-5" />}
 				/>
 				<div data-tauri-drag-region class="flex-1 h-full" />
+				<LanguageDropdown />
 				<Show when={customDomain.data}>
 					<ShareButton />
 				</Show>
@@ -409,8 +417,8 @@ export function Header() {
 								<IconCapCaptions class="size-3.5" />
 							</Show>
 							{editorState.captions.isGenerating
-								? "Regenerating..."
-								: "Regenerate captions"}
+								? t("Regenerating...")
+								: t("Regenerate captions")}
 						</button>
 						<Show when={!editorState.captions.isGenerating}>
 							<div class="w-px h-4 bg-gray-6" />
@@ -454,7 +462,7 @@ export function Header() {
 						>
 							<IconLucideArrowLeft class="size-4" />
 						</Show>
-						{isTranscriptOpen() ? "Back" : "Transcript"}
+						{isTranscriptOpen() ? t("Back") : t("Transcript")}
 					</Button>
 				</Show>
 				<Button
@@ -470,7 +478,7 @@ export function Header() {
 					}}
 				>
 					<UploadIcon class="size-4" />
-					Export
+					{t("Export")}
 				</Button>
 				{ostype() === "windows" && <CaptionControlsWindows11 />}
 			</div>
@@ -489,6 +497,7 @@ function ImportRecordingDialog(props: {
 	onImport: (recording: ImportableRecording) => void;
 	onImportMp4: () => void;
 }) {
+	const { t } = useI18n();
 	return (
 		<Dialog.Root
 			open={props.open}
@@ -499,10 +508,10 @@ function ImportRecordingDialog(props: {
 			<Dialog.Header>
 				<div class="flex flex-col gap-0.5 min-w-0">
 					<KDialog.Title class="text-sm font-medium text-gray-12">
-						Import recording
+						{t("Import recording")}
 					</KDialog.Title>
 					<KDialog.Description class="text-xs text-gray-10">
-						Newest to oldest
+						{t("Newest to oldest")}
 					</KDialog.Description>
 				</div>
 			</Dialog.Header>
@@ -517,19 +526,19 @@ function ImportRecordingDialog(props: {
 							props.onSearch("");
 						}
 					}}
-					placeholder="Search recordings"
+					placeholder={t("Search recordings")}
 					autoCapitalize="off"
 					autocorrect="off"
 					autocomplete="off"
 					spellcheck={false}
-					aria-label="Search recordings"
+					aria-label={t("Search recordings")}
 				/>
 				<div class="min-h-[12rem] max-h-[20rem] overflow-y-auto custom-scroll rounded-lg border border-gray-3 bg-gray-2">
 					<Show
 						when={!props.isLoading}
 						fallback={
 							<div class="flex h-48 items-center justify-center text-xs text-gray-10">
-								Loading recordings...
+								{t("Loading recordings...")}
 							</div>
 						}
 					>
@@ -537,7 +546,7 @@ function ImportRecordingDialog(props: {
 							when={props.recordings.length > 0}
 							fallback={
 								<div class="flex h-48 items-center justify-center text-xs text-gray-10">
-									No importable recordings found
+									{t("No importable recordings found")}
 								</div>
 							}
 						>
@@ -565,7 +574,7 @@ function ImportRecordingDialog(props: {
 					}}
 					disabled={props.isImporting}
 				>
-					Import MP4
+					{t("Import MP4")}
 				</Button>
 			</Dialog.Footer>
 		</Dialog.Root>
@@ -577,6 +586,9 @@ function ImportRecordingItem(props: {
 	disabled: boolean;
 	onClick: () => void;
 }) {
+	const { t } = useI18n();
+	const recordingModeLabel = (mode: RecordingMetaWithMetadata["mode"]) =>
+		t(mode === "studio" ? "Studio Mode" : "Instant Mode");
 	const [imageExists, setImageExists] = createSignal(true);
 
 	return (

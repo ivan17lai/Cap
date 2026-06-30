@@ -6,6 +6,7 @@ import {
 	createSignal,
 	Show,
 } from "solid-js";
+import { useI18n } from "~/i18n";
 import { trackEvent } from "~/utils/analytics";
 import { createTauriEventListener } from "~/utils/createEventListener";
 import { createCurrentRecordingQuery } from "~/utils/queries";
@@ -32,6 +33,7 @@ export default function MicrophoneSelect(props: {
 	onOpen?: () => void;
 	onOpenSettings?: () => void;
 }) {
+	const { t } = useI18n();
 	const DB_SCALE = 40;
 	const currentRecording = createCurrentRecordingQuery();
 	const requestPermission = useRequestPermission();
@@ -107,8 +109,8 @@ export default function MicrophoneSelect(props: {
 							}}
 							onPointerDown={(e) => e.stopPropagation()}
 							class={DEVICE_SHORTCUT_BUTTON_CLASS}
-							title="Microphone settings"
-							aria-label="Microphone settings"
+							title={t("Microphone settings")}
+							aria-label={t("Microphone settings")}
 						>
 							<IconLucideSettings class="size-3.5" />
 						</button>

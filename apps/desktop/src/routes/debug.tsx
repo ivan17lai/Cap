@@ -4,9 +4,11 @@ import { getVersion } from "@tauri-apps/api/app";
 import * as dialog from "@tauri-apps/plugin-dialog";
 import { check } from "@tauri-apps/plugin-updater";
 import { createSignal, createUniqueId, For, onMount } from "solid-js";
+import { useI18n } from "~/i18n";
 import { commands } from "~/utils/tauri";
 
 export default function Debug() {
+	const { t } = useI18n();
 	const navigate = useNavigate();
 	const [version, setVersion] = createSignal<string>("");
 	const [updateStatus, setUpdateStatus] = createSignal<string>("");
@@ -58,13 +60,13 @@ export default function Debug() {
 
 	return (
 		<main class="w-full h-full bg-gray-2 text-(--text-primary) p-4">
-			<h2 class="text-2xl font-bold">Debug Windows</h2>
+			<h2 class="text-2xl font-bold">{t("Debug Windows")}</h2>
 			<div class="p-2 mb-4">
 				<button
 					class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-sm"
 					onClick={() => commands.showWindow("Onboarding")}
 				>
-					Show Onboarding Window
+					{t("Show Onboarding Window")}
 				</button>
 				<button
 					class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-sm"
@@ -72,14 +74,14 @@ export default function Debug() {
 						commands.showWindow({ InProgressRecording: { countdown: 3 } })
 					}
 				>
-					Show Recording Controls Window
+					{t("Show Recording Controls Window")}
 				</button>
 			</div>
 
-			<h2 class="text-2xl font-bold mt-4">Updates</h2>
+			<h2 class="text-2xl font-bold mt-4">{t("Updates")}</h2>
 			<div class="p-2 mb-4">
 				<p class="mb-2 text-sm text-(--text-secondary)">
-					Current version: v{version()}
+					{t("Current version")}: v{version()}
 				</p>
 				<div class="flex flex-row gap-2 items-center">
 					<button
@@ -87,26 +89,26 @@ export default function Debug() {
 						onClick={checkForUpdates}
 						disabled={isChecking()}
 					>
-						Check for Updates
+						{t("Check for Updates")}
 					</button>
 					<button
 						class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-sm"
 						onClick={() => navigate("/update")}
 					>
-						Go to Update Page
+						{t("Go to Update Page")}
 					</button>
 					<button
 						class="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-sm disabled:opacity-50"
 						onClick={simulateUpdatePopup}
 						disabled={isChecking()}
 					>
-						Simulate Update Flow
+						{t("Simulate Update Flow")}
 					</button>
 				</div>
 				{updateStatus() && <p class="mt-2 text-sm">{updateStatus()}</p>}
 			</div>
 
-			<h2 class="text-2xl font-bold mt-4">Fail Points</h2>
+			<h2 class="text-2xl font-bold mt-4">{t("Fail Points")}</h2>
 			<ul class="p-2">
 				<For each={orderedFails()}>
 					{(fail) => {

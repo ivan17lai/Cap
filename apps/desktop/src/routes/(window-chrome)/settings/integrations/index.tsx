@@ -1,6 +1,7 @@
 import { Button } from "@cap/ui-solid";
 import { useNavigate } from "@solidjs/router";
 import { createResource, For, onMount } from "solid-js";
+import { useI18n } from "~/i18n";
 import IconLucideDatabase from "~icons/lucide/database";
 
 import "@total-typescript/ts-reset/filter-boolean";
@@ -45,6 +46,7 @@ const GoogleDriveIcon = (props: { class?: string }) => (
 );
 
 export default function AppsTab() {
+	const { t } = useI18n();
 	const navigate = useNavigate();
 	const auth = authStore.createQuery();
 	const organizationSelection = createSelectedOrganization();
@@ -105,8 +107,10 @@ export default function AppsTab() {
 		<div class="cap-settings-page flex flex-col h-full custom-scroll">
 			<SettingsPageContent>
 				<Section
-					title="Integrations"
-					description="Configure integrations to extend Cap's functionality and connect with third-party services."
+					title={t("Integrations")}
+					description={t(
+						"Configure integrations to extend Cap's functionality and connect with third-party services.",
+					)}
 				>
 					<div class="space-y-3">
 						<For each={apps}>
@@ -124,10 +128,10 @@ export default function AppsTab() {
 											onClick={() => handleAppClick(app)}
 										>
 											{managedByOrganization()
-												? "Managed by your organization"
+												? t("Managed by your organization")
 												: app.pro && !isPro()
-													? "Upgrade to Pro"
-													: "Configure"}
+													? t("Upgrade to Pro")
+													: t("Configure")}
 										</Button>
 									</div>
 									<p class="text-xs leading-snug text-gray-10">

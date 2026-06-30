@@ -23,6 +23,7 @@ import {
 	createCropOptionsMenuItems,
 	type Ratio,
 } from "~/components/Cropper";
+import { useI18n } from "~/i18n";
 import { composeEventHandlers } from "~/utils/composeEventHandlers";
 import IconCapCircleX from "~icons/cap/circle-x";
 import IconLucideMaximize from "~icons/lucide/maximize";
@@ -193,6 +194,7 @@ export function Editor() {
 }
 
 function Dialogs() {
+	const { t } = useI18n();
 	const { dialog, setDialog, setProject, editorInstance } =
 		useScreenshotEditorContext();
 
@@ -300,6 +302,7 @@ function Dialogs() {
 										snapToRatioEnabled: snapToRatio(),
 										onAspectSet: setAspect,
 										onSnapToRatioSet: setSnapToRatioEnabled,
+										t,
 									});
 									const menu = await Menu.new({ items });
 									let pos: LogicalPosition | undefined;
@@ -343,7 +346,7 @@ function Dialogs() {
 										<Dialog.Header>
 											<div class="flex flex-row space-x-8">
 												<div class="flex flex-row items-center space-x-3 text-gray-11">
-													<span>Size</span>
+													<span>{t("Size")}</span>
 													<div class="w-13">
 														<BoundInput field="width" max={originalSize.x} />
 													</div>
@@ -353,7 +356,7 @@ function Dialogs() {
 													</div>
 												</div>
 												<div class="flex flex-row items-center space-x-3 text-gray-11">
-													<span>Position</span>
+													<span>{t("Position")}</span>
 													<div class="w-13">
 														<BoundInput field="x" />
 													</div>
@@ -403,7 +406,7 @@ function Dialogs() {
 														crop().height === originalSize.y
 													}
 												>
-													Full
+													{t("Full")}
 												</EditorButton>
 												<EditorButton
 													leftIcon={<IconCapCircleX />}
@@ -418,7 +421,7 @@ function Dialogs() {
 														crop().height === initialBounds.height
 													}
 												>
-													Reset
+													{t("Reset")}
 												</EditorButton>
 											</div>
 										</Dialog.Header>
@@ -473,7 +476,7 @@ function Dialogs() {
 													setDialog({ open: false });
 												}}
 											>
-												Save
+												{t("Save")}
 											</Button>
 										</Dialog.Footer>
 									</>

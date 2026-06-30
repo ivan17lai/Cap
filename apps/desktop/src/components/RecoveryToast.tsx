@@ -1,6 +1,7 @@
 import { Button } from "@cap/ui-solid";
 import { createMutation } from "@tanstack/solid-query";
 import { createSignal, onMount, Show } from "solid-js";
+import { useI18n } from "~/i18n";
 import { commands, type IncompleteRecordingInfo } from "~/utils/tauri";
 
 function formatDuration(secs: number): string {
@@ -18,6 +19,7 @@ function formatDuration(secs: number): string {
 const RECOVERY_CHECK_DELAY_MS = 2000;
 
 export function RecoveryToast() {
+	const { t } = useI18n();
 	const [incompleteRecordings, setIncompleteRecordings] = createSignal<
 		IncompleteRecordingInfo[] | null
 	>(null);
@@ -78,14 +80,14 @@ export function RecoveryToast() {
 					<div class="flex items-center gap-2">
 						<div class="flex-1 min-w-0">
 							<p class="text-red-11 text-[10px] font-medium">
-								Incomplete Recording
+								{t("Incomplete Recording")}
 							</p>
 							<p class="text-gray-12 text-xs font-medium truncate">
 								{rec().prettyName}
 							</p>
 							<p class="text-gray-11 text-[10px]">
-								{rec().segmentCount} segment
-								{rec().segmentCount !== 1 ? "s" : ""}
+								{rec().segmentCount} {t("segment")}
+								{rec().segmentCount !== 1 ? t("s") : ""}
 								{duration() && ` · ~${duration()}`}
 							</p>
 							<Show when={recoverMutation.error}>
@@ -94,7 +96,9 @@ export function RecoveryToast() {
 										const e = error();
 										if (e instanceof Error) return e.message;
 										if (typeof e === "string") return e;
-										return "Recovery failed. The recording may be corrupted.";
+										return t(
+											"Recovery failed. The recording may be corrupted.",
+										);
 									};
 									return (
 										<p class="text-red-11 text-[10px] mt-1">{errorMessage()}</p>
@@ -109,7 +113,7 @@ export function RecoveryToast() {
 								variant="primary"
 								size="xs"
 							>
-								{recoverMutation.isPending ? "..." : "Recover"}
+								{recoverMutation.isPending ? "..." : t("Recover")}
 							</Button>
 							<Button
 								onClick={() => discardMutation.mutate(rec().projectPath)}
@@ -117,7 +121,7 @@ export function RecoveryToast() {
 								variant="gray"
 								size="xs"
 							>
-								Discard
+								{t("Discard")}
 							</Button>
 						</div>
 					</div>

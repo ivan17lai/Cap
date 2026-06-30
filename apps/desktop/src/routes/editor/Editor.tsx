@@ -35,6 +35,7 @@ import {
 	type Ratio,
 } from "~/components/Cropper";
 import { Toggle } from "~/components/Toggle";
+import { useI18n } from "~/i18n";
 import { composeEventHandlers } from "~/utils/composeEventHandlers";
 import { createTauriEventListener } from "~/utils/createEventListener";
 import { commands, events } from "~/utils/tauri";
@@ -265,6 +266,7 @@ function EditorContent(props: { projectPath: string }) {
 }
 
 function Inner() {
+	const { t } = useI18n();
 	const {
 		project,
 		editorState,
@@ -309,12 +311,14 @@ function Inner() {
 			closePromptOpen = true;
 			try {
 				const resumeExport = await ask(
-					"An export is currently running. Keep this editor open to continue it, or quit the editor and cancel the export.",
+					t(
+						"An export is currently running. Keep this editor open to continue it, or quit the editor and cancel the export.",
+					),
 					{
-						title: "Export in Progress",
+						title: t("Export in Progress"),
 						kind: "warning",
-						okLabel: "Resume Export",
-						cancelLabel: "Quit Editor",
+						okLabel: t("Resume Export"),
+						cancelLabel: t("Quit Editor"),
 					},
 				);
 
@@ -625,7 +629,7 @@ function Inner() {
 											"bg-gray-3/55 dark:bg-gray-4/50": isResizingTimeline(),
 										}}
 										onMouseDown={handleTimelineResizeStart}
-										aria-label="Resize timeline height"
+										aria-label={t("Resize timeline height")}
 									>
 										<For each={TIMELINE_RESIZE_GRIP_MARKS}>
 											{() => (
@@ -650,7 +654,7 @@ function Inner() {
 									class="flex-none flex items-center justify-center cursor-col-resize select-none group z-10"
 									style={{ width: "12px" }}
 									onMouseDown={handleSplitResizeStart}
-									aria-label="Resize transcript panel"
+									aria-label={t("Resize transcript panel")}
 									role="separator"
 									aria-orientation="vertical"
 								>
@@ -693,6 +697,7 @@ function Inner() {
 }
 
 function Dialogs() {
+	const { t } = useI18n();
 	const { dialog, setDialog, presets, project } = useEditorContext();
 
 	const isDialogType = () => isModalDialog(dialog());
@@ -740,24 +745,24 @@ function Dialogs() {
 
 								return (
 									<DialogContent
-										title="Create Preset"
+										title={t("Create Preset")}
 										confirm={
 											<Dialog.ConfirmButton
 												disabled={createPreset.isPending}
 												onClick={() => createPreset.mutate()}
 											>
-												Create
+												{t("Create")}
 											</Dialog.ConfirmButton>
 										}
 									>
-										<Subfield name="Name" required />
+										<Subfield name={t("Name")} required />
 										<Input
 											class="mt-2"
 											value={form.name}
-											placeholder="Enter preset name..."
+											placeholder={t("Enter preset name...")}
 											onInput={(e) => setForm("name", e.currentTarget.value)}
 										/>
-										<Subfield name="Set as default" class="mt-4">
+										<Subfield name={t("Set as default")} class="mt-4">
 											<Toggle
 												checked={form.default}
 												onChange={(checked) => setForm("default", checked)}
@@ -788,17 +793,17 @@ function Dialogs() {
 
 								return (
 									<DialogContent
-										title="Rename Preset"
+										title={t("Rename Preset")}
 										confirm={
 											<Dialog.ConfirmButton
 												disabled={renamePreset.isPending}
 												onClick={() => renamePreset.mutate()}
 											>
-												Rename
+												{t("Rename")}
 											</Dialog.ConfirmButton>
 										}
 									>
-										<Subfield name="Name" required />
+										<Subfield name={t("Name")} required />
 										<Input
 											class="mt-2"
 											value={name()}
@@ -827,19 +832,19 @@ function Dialogs() {
 
 								return (
 									<DialogContent
-										title="Delete Preset"
+										title={t("Delete Preset")}
 										confirm={
 											<Dialog.ConfirmButton
 												variant="destructive"
 												onClick={() => deletePreset.mutate()}
 												disabled={deletePreset.isPending}
 											>
-												Delete
+												{t("Delete")}
 											</Dialog.ConfirmButton>
 										}
 									>
 										<p class="text-gray-11">
-											Are you sure you want to delete this preset?
+											{t("Are you sure you want to delete this preset?")}
 										</p>
 									</DialogContent>
 								);
@@ -1065,6 +1070,7 @@ function Dialogs() {
 										snapToRatioEnabled: snapToRatio(),
 										onAspectSet: setAspect,
 										onSnapToRatioSet: setSnapToRatioEnabled,
+										t,
 									});
 									const menu = await Menu.new({ items });
 									let pos: LogicalPosition | undefined;
@@ -1108,7 +1114,7 @@ function Dialogs() {
 										<Dialog.Header>
 											<div class="flex flex-row space-x-8">
 												<div class="flex flex-row items-center space-x-3 text-gray-11">
-													<span>Size</span>
+													<span>{t("Size")}</span>
 													<div class="w-13">
 														<BoundInput field="width" max={display.width} />
 													</div>
@@ -1118,7 +1124,7 @@ function Dialogs() {
 													</div>
 												</div>
 												<div class="flex flex-row items-center space-x-3 text-gray-11">
-													<span>Position</span>
+													<span>{t("Position")}</span>
 													<div class="w-13">
 														<BoundInput field="x" />
 													</div>
@@ -1168,7 +1174,7 @@ function Dialogs() {
 														crop().height === display.height
 													}
 												>
-													Full
+													{t("Full")}
 												</EditorButton>
 												<EditorButton
 													leftIcon={<IconCapCircleX />}
@@ -1183,7 +1189,7 @@ function Dialogs() {
 														crop().height === dialog().size.y
 													}
 												>
-													Reset
+													{t("Reset")}
 												</EditorButton>
 											</div>
 										</Dialog.Header>
@@ -1253,7 +1259,7 @@ function Dialogs() {
 													setDialog((d) => ({ ...d, open: false }));
 												}}
 											>
-												Save
+												{t("Save")}
 											</Button>
 										</Dialog.Footer>
 									</>

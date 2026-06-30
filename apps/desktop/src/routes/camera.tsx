@@ -37,6 +37,7 @@ import {
 	getDefaultCameraWindowState,
 	normalizeBackgroundBlurMode,
 } from "~/components/CameraPreviewChrome";
+import { useI18n } from "~/i18n";
 import { generalSettingsStore } from "~/store";
 import { createTauriEventListener } from "~/utils/createEventListener";
 import { createCameraMutation } from "~/utils/queries";
@@ -222,6 +223,7 @@ export default function () {
 function NativeCameraPreviewPage(props: {
 	issue: Accessor<CameraPreviewIssue | null>;
 }) {
+	const { t } = useI18n();
 	const isCameraOnlyMode = () => getCameraOnlyMode();
 
 	const [state, setState] = makePersisted(
@@ -340,7 +342,7 @@ function NativeCameraPreviewPage(props: {
 
 			<Show when={cameraPreviewReady.loading}>
 				<div class="w-full flex-1 flex items-center justify-center">
-					<div class="text-gray-11">Loading camera...</div>
+					<div class="text-gray-11">{t("Loading camera...")}</div>
 				</div>
 			</Show>
 		</div>
@@ -957,9 +959,10 @@ function Canvas(props: {
 }
 
 function CameraLoadingState() {
+	const { t } = useI18n();
 	return (
 		<div class="w-full flex-1 flex items-center justify-center">
-			<div class="text-gray-11">Loading camera...</div>
+			<div class="text-gray-11">{t("Loading camera...")}</div>
 		</div>
 	);
 }

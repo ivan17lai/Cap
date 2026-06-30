@@ -8,6 +8,7 @@ import type { ComponentProps } from "solid-js";
 import { createMemo, createSignal, Show, splitProps } from "solid-js";
 import toast from "solid-toast";
 import Tooltip from "~/components/Tooltip";
+import { useI18n } from "~/i18n";
 import { openRecordingFolder } from "~/utils/recording";
 import {
 	type CaptureDisplayWithThumbnail,
@@ -76,6 +77,7 @@ type TargetCardProps = (
 	};
 
 export default function TargetCard(props: TargetCardProps) {
+	const { t } = useI18n();
 	const [local, rest] = splitProps(props, [
 		"variant",
 		"target",
@@ -137,7 +139,7 @@ export default function TargetCard(props: TargetCardProps) {
 		if (target) return target.owner_name;
 		const recording = recordingTarget();
 		if (recording) {
-			return recording.mode === "studio" ? "Studio Mode" : "Instant Mode";
+			return recording.mode === "studio" ? t("Studio Mode") : t("Instant Mode");
 		}
 		return undefined;
 	});
@@ -223,10 +225,10 @@ export default function TargetCard(props: TargetCardProps) {
 		if (!screenshot) return;
 		try {
 			await commands.copyScreenshotToClipboard(screenshot.path);
-			toast.success("Screenshot copied to clipboard");
+			toast.success(t("Screenshot copied to clipboard"));
 		} catch (error) {
 			console.error("Failed to copy screenshot:", error);
-			toast.error("Failed to copy screenshot");
+			toast.error(t("Failed to copy screenshot"));
 		}
 	};
 
@@ -246,10 +248,10 @@ export default function TargetCard(props: TargetCardProps) {
 			});
 			if (!path) return;
 			await commands.copyFileToPath(screenshot.path, path);
-			toast.success("Screenshot saved");
+			toast.success(t("Screenshot saved"));
 		} catch (error) {
 			console.error("Failed to save screenshot:", error);
-			toast.error("Failed to save screenshot");
+			toast.error(t("Failed to save screenshot"));
 		}
 	};
 
@@ -275,7 +277,7 @@ export default function TargetCard(props: TargetCardProps) {
 		if (!recording) return;
 		openRecordingFolder(recording.path, recording.mode).catch((error) => {
 			console.error("Failed to open recording folder:", error);
-			toast.error("Failed to open folder");
+			toast.error(t("Failed to open folder"));
 		});
 	};
 
@@ -364,7 +366,7 @@ export default function TargetCard(props: TargetCardProps) {
 						<div class="flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-red-9/20 text-red-11">
 							<IconPhWarningBold class="size-2.5" />
 							<span class="text-[10px] font-medium">
-								{recordingFailed() ? "Recording failed" : "Upload failed"}
+								{recordingFailed() ? t("Recording failed") : t("Upload failed")}
 							</span>
 						</div>
 					</div>
@@ -390,7 +392,7 @@ export default function TargetCard(props: TargetCardProps) {
 				</div>
 				<Show when={local.variant === "screenshot"}>
 					<div class="flex items-center justify-between px-2 pb-1.5 pt-0.5 gap-1">
-						<Tooltip content="Edit">
+						<Tooltip content={t("Edit")}>
 							<div
 								role="button"
 								tabIndex={-1}
@@ -400,7 +402,7 @@ export default function TargetCard(props: TargetCardProps) {
 								<IconLucideEdit class="size-3.5" />
 							</div>
 						</Tooltip>
-						<Tooltip content="Copy to clipboard">
+						<Tooltip content={t("Copy to clipboard")}>
 							<div
 								role="button"
 								tabIndex={-1}
@@ -410,7 +412,7 @@ export default function TargetCard(props: TargetCardProps) {
 								<IconLucideCopy class="size-3.5" />
 							</div>
 						</Tooltip>
-						<Tooltip content="Save as...">
+						<Tooltip content={t("Save as...")}>
 							<div
 								role="button"
 								tabIndex={-1}
@@ -435,7 +437,7 @@ export default function TargetCard(props: TargetCardProps) {
 						return (
 							<div class="flex items-center justify-between px-2 pb-1.5 pt-0.5 gap-1">
 								<Show when={isStudio}>
-									<Tooltip content="Edit">
+									<Tooltip content={t("Edit")}>
 										<div
 											role="button"
 											tabIndex={-1}
@@ -451,7 +453,9 @@ export default function TargetCard(props: TargetCardProps) {
 										when={hasProgress}
 										fallback={
 											<Tooltip
-												content={uploadFailed ? "Retry upload" : "Reupload"}
+												content={
+													uploadFailed ? t("Retry upload") : t("Reupload")
+												}
 											>
 												<div
 													role="button"
@@ -474,7 +478,7 @@ export default function TargetCard(props: TargetCardProps) {
 									</Show>
 								</Show>
 								<Show when={recording.sharing}>
-									<Tooltip content="Open link">
+									<Tooltip content={t("Open link")}>
 										<div
 											role="button"
 											tabIndex={-1}
@@ -485,7 +489,7 @@ export default function TargetCard(props: TargetCardProps) {
 										</div>
 									</Tooltip>
 								</Show>
-								<Tooltip content="Open folder">
+								<Tooltip content={t("Open folder")}>
 									<div
 										role="button"
 										tabIndex={-1}
@@ -495,7 +499,7 @@ export default function TargetCard(props: TargetCardProps) {
 										<IconLucideFolder class="size-3.5" />
 									</div>
 								</Tooltip>
-								<Tooltip content="Delete">
+								<Tooltip content={t("Delete")}>
 									<div
 										role="button"
 										tabIndex={-1}

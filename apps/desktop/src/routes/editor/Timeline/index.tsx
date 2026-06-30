@@ -19,6 +19,7 @@ import {
 } from "solid-js";
 import { produce } from "solid-js/store";
 import toast from "solid-toast";
+import { useI18n } from "~/i18n";
 
 import "./styles.css";
 
@@ -69,51 +70,6 @@ type TrackDefinition = {
 	locked: boolean;
 };
 
-const trackDefinitions: TrackDefinition[] = [
-	{
-		type: "clip",
-		label: "Clip",
-		icon: trackIcons.clip,
-		locked: true,
-	},
-	{
-		type: "caption",
-		label: "Captions",
-		icon: trackIcons.caption,
-		locked: false,
-	},
-	{
-		type: "keyboard",
-		label: "Keyboard",
-		icon: trackIcons.keyboard,
-		locked: false,
-	},
-	{
-		type: "text",
-		label: "Text",
-		icon: trackIcons.text,
-		locked: false,
-	},
-	{
-		type: "mask",
-		label: "Mask",
-		icon: trackIcons.mask,
-		locked: false,
-	},
-	{
-		type: "zoom",
-		label: "Zoom",
-		icon: trackIcons.zoom,
-		locked: true,
-	},
-	{
-		type: "scene",
-		label: "Scene",
-		icon: trackIcons.scene,
-		locked: false,
-	},
-];
-
 function deleteTrackLane<T extends { track?: number }>(
 	segments: T[],
 	laneIndex: number,
@@ -133,6 +89,7 @@ export function Timeline(props: {
 		visibleTrackCount: number;
 	}) => void;
 }) {
+	const { t } = useI18n();
 	const {
 		project,
 		setProject,
@@ -149,6 +106,26 @@ export function Timeline(props: {
 	const duration = () => editorInstance.recordingDuration;
 	const transform = () => editorState.timeline.transform;
 
+	const getTrackDefinitions = (): TrackDefinition[] => [
+		{ type: "clip", label: t("Clip"), icon: trackIcons.clip, locked: true },
+		{
+			type: "caption",
+			label: t("Captions"),
+			icon: trackIcons.caption,
+			locked: false,
+		},
+		{
+			type: "keyboard",
+			label: t("Keyboard"),
+			icon: trackIcons.keyboard,
+			locked: false,
+		},
+		{ type: "text", label: t("Text"), icon: trackIcons.text, locked: false },
+		{ type: "mask", label: t("Mask"), icon: trackIcons.mask, locked: false },
+		{ type: "zoom", label: t("Zoom"), icon: trackIcons.zoom, locked: true },
+		{ type: "scene", label: t("Scene"), icon: trackIcons.scene, locked: false },
+	];
+
 	const [timelineContainerRef, setTimelineContainerRef] =
 		createSignal<HTMLDivElement>();
 	const [timelineScrollRef, setTimelineScrollRef] =
@@ -163,7 +140,7 @@ export function Timeline(props: {
 	const captionTrackVisible = () => trackState().caption;
 	const keyboardTrackVisible = () => trackState().keyboard;
 	const trackOptions = createMemo(() =>
-		trackDefinitions.map((definition) => ({
+		getTrackDefinitions().map((definition) => ({
 			...definition,
 			active:
 				definition.type === "caption"
@@ -433,7 +410,8 @@ export function Timeline(props: {
 		const menu = await Menu.new({
 			items: [
 				await MenuItem.new({
-					text: `Delete ${type === "text" ? "text" : "mask"} track`,
+					text:
+						type === "text" ? t("Delete text track") : t("Delete mask track"),
 					action: () => handleDeleteTrackLane(type, laneIndex),
 				}),
 			],
@@ -694,7 +672,9 @@ export function Timeline(props: {
 
 			if (result.segments.length < 1) {
 				toast.error(
-					"No captions were generated. The audio might be too quiet or unclear.",
+					t(
+						"No captions were generated. The audio might be too quiet or unclear.",
+					),
 				);
 				return;
 			}
@@ -712,11 +692,11 @@ export function Timeline(props: {
 
 			setEditorState("timeline", "tracks", "caption", true);
 			setEditorState("captions", "isStale", false);
-			toast.success("Captions generated successfully!");
+			toast.success(t("Captions generated successfully!"));
 		} catch (error) {
 			console.error("Error generating captions:", error);
 			const errorMessage = getCaptionGenerationErrorMessage(error);
-			toast.error(`Failed to generate captions: ${errorMessage}`);
+			toast.error(`${t("Failed to generate captions:")} ${errorMessage}`);
 		} finally {
 			setEditorState("captions", "isGenerating", false);
 		}
@@ -841,7 +821,7 @@ export function Timeline(props: {
 						<TimelineMarkings />
 					</div>
 					<div class="absolute bottom-0 z-30">
-						<Tooltip content="Add track">
+						<Tooltip content={t("Add track")}>
 							<TrackManager
 								options={trackOptions()}
 								onToggle={handleToggleTrack}
@@ -1012,6 +992,7 @@ function TrackRow(props: {
 	onDelete?: () => void;
 	onContextMenu?: (e: MouseEvent) => void;
 }) {
+	const { t } = useI18n();
 	return (
 		<div
 			class="group/track flex items-stretch gap-2"
@@ -1034,7 +1015,7 @@ function TrackRow(props: {
 							props.onDelete?.();
 						}}
 						onMouseDown={(e) => e.stopPropagation()}
-						title="Delete track"
+						title={t("Delete track")}
 					>
 						<IconCapTrash class="size-4" />
 					</button>
